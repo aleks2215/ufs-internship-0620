@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Компонент CardIndex2 совпадает со своим снимком 1`] = `
+<div>
+  <div
+    class="ant-row separatedRow"
+  >
+    <div
+      class="ant-col-23"
+    >
+      <div
+        class="ant-row pairRow"
+      >
+        <div
+          class="ant-col-8 rightAligned bold"
+        >
+          Номер документа
+        </div>
+        <div
+          class="ant-col-16"
+        >
+          1
+        </div>
+      </div>
+      <div
+        class="ant-row pairRow"
+      >
+        <div
+          class="ant-col-8 rightAligned bold"
+        >
+          Очередь оплаты
+        </div>
+        <div
+          class="ant-col-16"
+        >
+          1
+        </div>
+      </div>
+      <div
+        class="ant-row pairRow"
+      >
+        <div
+          class="ant-col-8 rightAligned bold"
+        >
+          Сумма по документу
+        </div>
+        <div
+          class="ant-col-16"
+        >
+          5
+        </div>
+      </div>
+      <div
+        class="ant-row pairRow"
+      >
+        <div
+          class="ant-col-8 rightAligned bold"
+        >
+          Получатель
+        </div>
+        <div
+          class="ant-col-16"
+        >
+          3
+        </div>
+      </div>
+    </div>
+    <div
+      class="ant-col-1"
+    >
+      <button
+        class="ant-btn ant-btn-icon-only largeIcon"
+        type="button"
+      >
+        <i
+          class="anticon anticon-menu-unfold"
+        />
+      </button>
+    </div>
+  </div>
+</div>
+`;

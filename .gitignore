@@ -1,0 +1,9 @@
+*.idea
+*.iml
+/target
+*.log
+front-play/node_modules/
+front/live/
+front/.awcache/
+front/Default (1).xml
+front/coverage/

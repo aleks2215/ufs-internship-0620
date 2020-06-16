@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 (http://www.altova.com) by  () -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:complexType name="HeaderInfoType">
+		<xs:annotation>
+			<xs:documentation>Заголовок сообщений</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="rqUID" type="UUID32">
+				<xs:annotation>
+					<xs:documentation>Уникальный идентификатор запроса</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="rqTm" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>Дата и время передачи запроса</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="spName" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Идентификатор системы, инициировавший запроc</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="systemId" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Идентификатор системы-получателя запроса</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="SrvCardInitRq">
+		<xs:annotation>
+			<xs:documentation>Инициализация карты. Запрос</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="HeadInfo" type="HeaderInfoType"/>
+				<xs:element name="SrvCardInitRqMessage">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="commandCode" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Код команды '0' - подготовить терминал для  инициализации карты, '1' -  сброс текущей операции </xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SrvCardInitRs">
+		<xs:annotation>
+			<xs:documentation>Инициализация карты. Ответ</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="HeadInfo" type="HeaderInfoType"/>
+				<xs:element name="SrvCardInitRsMessage">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="responseCode" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Код ответа</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="responseMsg" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Соообщение ответа</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="cardNumber" type="CardNumType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Номер карты</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="cardExpDate" type="xs:date" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>действителен до</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="cardIssuingNetworkCode" type="xs:integer" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>0 -  Visa, 1 - MasterCard, 2 - Maestro, 3 - American Express</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="cardTypeId" type="xs:integer" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>0 - дебетовая, 1 - кредитная</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="cardOwnerFirstName" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Имя владельца карты</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:pattern value="([A-Z])"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="cardOwnerLastName" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Фамилия владельца карты</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:pattern value="([A-Z])"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SrvCardOperConfirmRq">
+		<xs:annotation>
+			<xs:documentation>Подтверждение на POS-терминале. Запрос</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="HeadInfo" type="HeaderInfoType"/>
+				<xs:element name="SrvCardOperConfirmRqMessage">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="cardTypeId" type="xs:integer">
+								<xs:annotation>
+									<xs:documentation>0 - дебетовая, 1 - кредитная</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="hintText" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Текст, выводимый на экран в качестве подсказки </xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="operationDetails" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Полный текст документа, выводимый на экран</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="maxLengh" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Максимальная длина вводимой строки</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SrvCardOperConfirmRs">
+		<xs:annotation>
+			<xs:documentation>Подтверждение на POS-терминале. Ответ</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="HeadInfo" type="HeaderInfoType"/>
+				<xs:element name="SrvCardOperConfirmRsMessage">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="responseCode" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Код ответа ('0' - подтверждено, '1' - отклонено клиентом)</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="cardIssuingNetworkCode" type="xs:integer" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>0 -  Visa, 1 - MasterCard, 2 - Maestro, 3 - American Express</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="cardTypeId" type="xs:integer" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>0 - дебетовая, 1 - кредитная</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="operationDate" type="xs:date" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Дата операции</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="operationTime" type="xs:time" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Время операции</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="cardNumber" type="CardNumType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Номер карты</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="cardExpDate" type="xs:date" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>действителен до</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="cardOwnerFirstName" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Имя владельца карты</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:pattern value="([A-Z])"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="cardOwnerLastName" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Фамилия владельца карты</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:pattern value="([A-Z])"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="UserInfo">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="UserInfoItem">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="userLogin" type="xs:string"/>
+							<xs:element name="employeeId" type="xs:string"/>
+							<xs:element name="firstName" type="xs:string"/>
+							<xs:element name="lastName" type="xs:string"/>
+							<xs:element name="patronymic" type="xs:string"/>
+							<xs:element name="role" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Роль пользователя 10001 - "Сотрудник по обслуживанияю корпоративных клиентов", 10002 - "Кассир"	</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:enumeration value="10001"/>
+										<xs:enumeration value="10002"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="email" type="xs:string"/>
+							<xs:element name="userPosition" type="xs:string"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:simpleType name="UUID32">
+		<xs:annotation>
+			<xs:documentation>UUID без разделителей. Набор из 32 символов [0-9], [a-f] или [A-F], без разделителей
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([0-9a-fA-F]){32}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CardNumType">
+		<xs:annotation>
+			<xs:documentation>Номер карты без разделителей. Набор из 16 символов [0-9]</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([0-9]){16}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AccountNumType">
+		<xs:annotation>
+			<xs:documentation>Номер счета без разделителей. Набор из 20 символов [0-9]</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="20"/>
+			<xs:pattern value="[0-9]{20}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="KPPType">
+		<xs:annotation>
+			<xs:documentation>Номер КПП. Набор из 9 символов [0-9]</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="OpStatusType">
+		<xs:annotation>
+			<xs:documentation>Статус операции(транзакции): New, AdvanceReservation, Committed, Cancelled</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="New"/>
+			<xs:enumeration value="AdvanceReservation"/>
+			<xs:enumeration value="Committed"/>
+			<xs:enumeration value="Cancelled"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="INNType">
+		<xs:annotation>
+			<xs:documentation>Номер ИНН. Набор символов [0-9], Min 10 Max 12</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="10"/>
+			<xs:maxLength value="12"/>
+			<xs:pattern value="([0-9]){10,12}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="BICType">
+		<xs:annotation>
+			<xs:documentation>Номер БИК. Набор из 9 символов [0-9]</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="9"/>
+			<xs:pattern value="([0-9]){9}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="SrvCardOperPrintRq">
+		<xs:annotation>
+			<xs:documentation>Печать чека на POS-терминале. Запрос</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="HeadInfo" type="HeaderInfoType"/>
+				<xs:element name="SrvCardOperPrintRqMessage">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="operationStatus" type="OpStatusType">
+								<xs:annotation>
+									<xs:documentation>Статус операции. Возможны только варианты Committed и Cancelled</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="legalEntityShortName" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>ЮЛ-получатель	</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="amount" type="xs:decimal" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Сумма</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="cardInfo" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Информация по карте</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="cardNumber" type="CardNumType" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Номер карты</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="cardExpDate" type="xs:date" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>действителен до</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="cardIssuingNetworkCode" type="xs:integer" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>0 -  Visa, 1 - MasterCard, 2 - Maestro, 3 - American Express</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="cardTypeId" type="xs:integer" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>0 - дебетовая, 1 - кредитная</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="cardOwnerFirstName" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Имя владельца карты</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="20"/>
+													<xs:pattern value="([A-Z])"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="cardOwnerLastName" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Фамилия владельца карты</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:maxLength value="20"/>
+													<xs:pattern value="([A-Z])"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="INN" type="INNType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>ИНН	</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="KPP" type="KPPType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>КПП</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="accountId" type="AccountNumType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Номер счета	</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="userPosition" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Должность кассового работника</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="userFullName" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation> Фамилия и инициалы кассового работника</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="workPlace_UId" type="UUID32" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Уникальный номер УРМ/Кассы	</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SrvCardOperPrintRs">
+		<xs:annotation>
+			<xs:documentation>Печать чека на POS-терминале. Ответ</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="HeadInfo" type="HeaderInfoType"/>
+				<xs:element name="SrvCardOperPrintRsMessage">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="responseCode" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Код ответа ('0' - успешно напечатано, '1' - ошибка)</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="responseMsg" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Текст ошибки</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

@@ -1,0 +1,110 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Компонент LegalEntity совпадает со своим снимком 1`] = `
+<div
+  class="ant-row"
+>
+  <div
+    class="ant-col-23"
+  >
+    <div
+      class="ant-row pairRow"
+    >
+      <div
+        class="ant-col-8 rightAligned bold"
+      >
+        Наименование
+      </div>
+      <div
+        class="ant-col-16"
+      >
+        OOO ДНК
+      </div>
+    </div>
+    <div
+      class="ant-row pairRow"
+    >
+      <div
+        class="ant-col-8 rightAligned bold"
+      >
+        Сокращенное наименование
+      </div>
+      <div
+        class="ant-col-16"
+      >
+        OOO ДНК
+      </div>
+    </div>
+    <div
+      class="ant-row pairRow"
+    >
+      <div
+        class="ant-col-8 rightAligned bold"
+      >
+        ИНН
+      </div>
+      <div
+        class="ant-col-16"
+      >
+        01221412
+      </div>
+    </div>
+    <div
+      class="ant-row pairRow"
+    >
+      <div
+        class="ant-col-8 rightAligned bold"
+      >
+        ОГРН
+      </div>
+      <div
+        class="ant-col-16"
+      >
+        102312412
+      </div>
+    </div>
+    <div
+      class="ant-row pairRow"
+    >
+      <div
+        class="ant-col-8 rightAligned bold"
+      >
+        КПП
+      </div>
+      <div
+        class="ant-col-16"
+      >
+        121412412
+      </div>
+    </div>
+    <div
+      class="ant-row pairRow"
+    >
+      <div
+        class="ant-col-8 rightAligned bold"
+      >
+        Юридический адрес
+      </div>
+      <div
+        class="ant-col-16"
+      >
+        Ярославль
+      </div>
+    </div>
+    <div
+      class="ant-row pairRow"
+    >
+      <div
+        class="ant-col-8 rightAligned bold"
+      >
+        Фактический адрес
+      </div>
+      <div
+        class="ant-col-16"
+      >
+        Ярославль
+      </div>
+    </div>
+  </div>
+</div>
+`;

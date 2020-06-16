@@ -1,0 +1,20 @@
+before_script:
+ - echo "Execute scripts which are required to bootstrap the application. !"
+
+after_script:
+ - echo "Clean up activity can be done here !."
+
+cache:
+ paths:
+ - /root/.m2/repository
+
+stages:
+ - build
+
+build:
+ stage: build
+ image: maven:3.3.9-jdk-8
+ script:
+ - mvn clean package
+ tags:
+ - docker

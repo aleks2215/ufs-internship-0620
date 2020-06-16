@@ -1,0 +1,186 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Компонент CardIndex1 совпадает со своим снимком 1`] = `
+<div>
+  <div
+    class="ant-row separatedRow"
+  >
+    <div
+      class="ant-col-23"
+    >
+      <div
+        class="ant-row pairRow"
+      >
+        <div
+          class="ant-col-8 rightAligned bold"
+        >
+          Номер документа
+        </div>
+        <div
+          class="ant-col-16"
+        >
+          98710245
+        </div>
+      </div>
+      <div
+        class="ant-row pairRow"
+      >
+        <div
+          class="ant-col-8 rightAligned bold"
+        >
+          Вид
+        </div>
+        <div
+          class="ant-col-16"
+        >
+          Платежное поручение
+        </div>
+      </div>
+      <div
+        class="ant-row pairRow"
+      >
+        <div
+          class="ant-col-8 rightAligned bold"
+        >
+          Получатель
+        </div>
+        <div
+          class="ant-col-16"
+        >
+          Газпром
+        </div>
+      </div>
+      <div
+        class="ant-row pairRow"
+      >
+        <div
+          class="ant-col-8 rightAligned bold"
+        >
+          Сумма
+        </div>
+        <div
+          class="ant-col-16"
+        >
+          20000
+        </div>
+      </div>
+      <div
+        class="ant-row pairRow"
+      >
+        <div
+          class="ant-col-8 rightAligned bold"
+        >
+          Дата
+        </div>
+        <div
+          class="ant-col-16"
+        >
+          01.05.2017
+        </div>
+      </div>
+    </div>
+    <div
+      class="ant-col-1"
+    >
+      <button
+        class="ant-btn ant-btn-icon-only largeIcon"
+        type="button"
+      >
+        <i
+          class="anticon anticon-menu-unfold"
+        />
+      </button>
+    </div>
+  </div>
+  <div
+    class="ant-row separatedRow"
+  >
+    <div
+      class="ant-col-23"
+    >
+      <div
+        class="ant-row pairRow"
+      >
+        <div
+          class="ant-col-8 rightAligned bold"
+        >
+          Номер документа
+        </div>
+        <div
+          class="ant-col-16"
+        >
+          98710246
+        </div>
+      </div>
+      <div
+        class="ant-row pairRow"
+      >
+        <div
+          class="ant-col-8 rightAligned bold"
+        >
+          Вид
+        </div>
+        <div
+          class="ant-col-16"
+        >
+          Платежное поручение
+        </div>
+      </div>
+      <div
+        class="ant-row pairRow"
+      >
+        <div
+          class="ant-col-8 rightAligned bold"
+        >
+          Получатель
+        </div>
+        <div
+          class="ant-col-16"
+        >
+          Газпром
+        </div>
+      </div>
+      <div
+        class="ant-row pairRow"
+      >
+        <div
+          class="ant-col-8 rightAligned bold"
+        >
+          Сумма
+        </div>
+        <div
+          class="ant-col-16"
+        >
+          20000
+        </div>
+      </div>
+      <div
+        class="ant-row pairRow"
+      >
+        <div
+          class="ant-col-8 rightAligned bold"
+        >
+          Дата
+        </div>
+        <div
+          class="ant-col-16"
+        >
+          01.05.2017
+        </div>
+      </div>
+    </div>
+    <div
+      class="ant-col-1"
+    >
+      <button
+        class="ant-btn ant-btn-icon-only largeIcon"
+        type="button"
+      >
+        <i
+          class="anticon anticon-menu-unfold"
+        />
+      </button>
+    </div>
+  </div>
+</div>
+`;

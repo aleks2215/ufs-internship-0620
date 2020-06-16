@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>mock-bs</artifactId>
+  <version>1.0</version>
+  <packaging>war</packaging>
+
+  <name>Mock Bank System Service</name>
+
+  <parent>
+    <groupId>ru.philit.ufs</groupId>
+    <artifactId>ufs-webapps</artifactId>
+    <version>1.0</version>
+  </parent>
+
+  <dependencies>
+    <!-- UFS Common -->
+    <dependency>
+      <groupId>ru.philit.ufs</groupId>
+      <artifactId>ufs-common</artifactId>
+      <version>${ufs.common.version}</version>
+    </dependency>
+
+    <!-- JMS -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jms</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+
+    <!-- Hazelcast -->
+    <dependency>
+      <groupId>com.hazelcast</groupId>
+      <artifactId>hazelcast</artifactId>
+      <version>${hazelcast.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jaxb2-maven-plugin</artifactId>
+        <version>${jaxb.plugin.version}</version>
+        <executions>
+          <execution>
+            <id>xjc</id>
+            <goals>
+              <goal>xjc</goal>
+            </goals>
+            <configuration>
+              <packageName>ru.philit.ufs.model.entity.esb.eks</packageName>
+              <sources>
+                <source>src/main/resources/xsd/eks.xsd</source>
+              </sources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>pprb.xsd</id>
+            <goals>
+              <goal>xjc</goal>
+            </goals>
+            <configuration>
+              <packageName>ru.philit.ufs.model.entity.esb.pprb</packageName>
+              <sources>
+                <source>src/main/resources/xsd/pprb.xsd</source>
+              </sources>
+              <clearOutputDir>false</clearOutputDir>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

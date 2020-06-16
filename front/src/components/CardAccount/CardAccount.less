@@ -1,0 +1,42 @@
+@import "../Shared";
+
+.accountCard {
+  :global {
+    .ant-collapse-item {
+      background: #ffffff;
+    }
+    .ant-collapse-item-active > .ant-collapse-header {
+      background: @green;
+      color: #ffffff;
+    }
+  }
+}
+
+.pairRow {
+  padding: 5px;
+}
+
+.separatedRow {
+  border-bottom: 1px solid #dce6dc;
+}
+
+.rightAligned {
+  padding-right: 10px;
+  text-align: right;
+  :global .ant-row {
+    text-align: right;
+  }
+}
+
+.bold {
+  font-weight: bold;
+  :global .ant-row {
+    font-weight: bold;
+  }
+}
+
+.largeIcon {
+  margin-top: 5px;
+  font-size: 24px;
+  height: 38px;
+}

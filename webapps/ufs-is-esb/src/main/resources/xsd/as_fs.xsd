@@ -1,0 +1,1350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 (http://www.altova.com) by  () -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:complexType name="HeaderInfoType">
+		<xs:annotation>
+			<xs:documentation>Заголовок сообщений</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="rqUID" type="UUID32">
+				<xs:annotation>
+					<xs:documentation>Уникальный идентификатор запроса</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="rqTm" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>Дата и время передачи запроса</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="spName" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Идентификатор системы, инициировавший запрос</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="systemId" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Идентификатор системы-получателя запроса</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="SrvCheckOverLimitRq">
+		<xs:annotation>
+			<xs:documentation>Сервис проверки перелимита общего остатка. Запрос</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="HeaderInfo" type="HeaderInfoType"/>
+				<xs:element name="SrvCheckOverLimitRqMessage">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="userLogin" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Логин</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="tobeIncreased" type="xs:boolean">
+								<xs:annotation>
+									<xs:documentation>Признак увеличения остатка кассы</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="amount" type="xs:decimal" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Сумма</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SrvCheckOverLimitRs">
+		<xs:annotation>
+			<xs:documentation>Сервис проверки перелимита общего остатка. Ответ</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="HeaderInfo" type="HeaderInfoType"/>
+				<xs:element name="SrvCheckOverLimitRsMessage">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="responseCode" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Код ответа</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="status" type="LimitStatusType">
+								<xs:annotation>
+									<xs:documentation>Cтатус</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SrvGetWorkPlaceInfoRq">
+		<xs:annotation>
+			<xs:documentation>Получение информации о рабочем месте. Запрос</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="HeaderInfo" type="HeaderInfoType"/>
+				<xs:element name="SrvGetWorkPlaceInfoRqMessage">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="workPlace_UId" type="UUID32">
+								<xs:annotation>
+									<xs:documentation>Уникальный номер УРМ/Кассы	</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SrvGetWorkPlaceInfoRs">
+		<xs:annotation>
+			<xs:documentation>Получение информации о рабочем месте. Ответ</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="HeaderInfo" type="HeaderInfoType"/>
+				<xs:element name="SrvGetWorkPlaceInfoRsMessage">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="workPlaceType" type="xs:integer">
+								<xs:annotation>
+									<xs:documentation>Тип рабочего места: 0 - касса, 1 - УРМ в операционном зале, 2 - другое</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="cashboxOnBoard" type="xs:boolean">
+								<xs:annotation>
+									<xs:documentation>Признак возможности принятия/выдачи наличности</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="subbranchCode" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Код подразделения, к которому принадлежит рабочее место</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="cashboxOnBoardDevice" type="UUID32" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Идентификатор кассового модуля в рамках рабочего места	</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="cashboxDeviceType" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Тип кассового модуля	</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="currentCurrencyType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Код валюты в кассовом модуле	</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:pattern value="([A-Z()\s]){2,10}"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="amount" type="xs:decimal" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Сумма</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="workPlaceLimit" type="xs:decimal" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Лимит суммы на рабочем месте</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="workPlaceOperationTypeLimit" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Группирующий элемент для лимитов по категории операции</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence minOccurs="0" maxOccurs="unbounded">
+										<xs:element name="OperationTypeLimitItem">
+											<xs:annotation>
+												<xs:documentation>Группирующий элемент для категории операции</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="operationCategory" type="OperCatType">
+														<xs:annotation>
+															<xs:documentation>Код категории операции</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="operationLimit" type="xs:decimal">
+														<xs:annotation>
+															<xs:documentation>Лимит для категории операции</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SrvCreateOperationRq">
+		<xs:annotation>
+			<xs:documentation>Резервирование номера кассовой операции. Запрос</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="HeaderInfo" type="HeaderInfoType"/>
+				<xs:element name="SrvCreateOperationRqMessage">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="operationType" type="OperTypeLabel">
+								<xs:annotation>
+									<xs:documentation>Код типа операции</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="workPlace_UId" type="UUID32">
+								<xs:annotation>
+									<xs:documentation>Уникальный номер УРМ/Кассы	</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SrvCreateOperationRs">
+		<xs:annotation>
+			<xs:documentation>Резервирование номера кассовой операции. Ответ</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="HeaderInfo" type="HeaderInfoType"/>
+				<xs:element name="SrvCreateOperationRsMessage">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="responseCode" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Код ответа</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="operationId" type="UUID32" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Номер кассовой операции</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="operationStatus" type="OpStatusType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Статус операции</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="createdDttm" type="xs:dateTime" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Дата создания операции</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SrvUpdOperationRq">
+		<xs:annotation>
+			<xs:documentation>Сохранение атрибутов кассовой операции. Запрос</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="HeaderInfo" type="HeaderInfoType"/>
+				<xs:element name="SrvUpdOperationRqMessage">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="operationId" type="UUID32">
+								<xs:annotation>
+									<xs:documentation>Номер кассовой операции</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="cashOrderId" type="UUID32" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Номер заявки в ЕФС для кассового ордера</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="operationNum" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Номер документа ( = номеру ОВН только для приходной операции)</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:pattern value="([0-9]){1,9}"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="operationStatus" type="OpStatusType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Статус операции</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="operationType" type="OperTypeLabel" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Код типа операции</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="workPlace_UId" type="UUID32" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Уникальный номер УРМ/Кассы	</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="senderAccountTypeId" type="AccountType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Тип счета</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="senderAccountCurrencyType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Валюта счета	</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:pattern value="([A-Z()\s]){2,10}"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="senderBank" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Банк-отправитель	</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="senderBankBIC" type="BICType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>БИК банка-отправителя	</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="senderAccountId" type="AccountNumType">
+								<xs:annotation>
+									<xs:documentation>Номер счета	</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="amount" type="xs:decimal">
+								<xs:annotation>
+									<xs:documentation>Сумма</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="recipientAccountTypeId" type="AccountType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Тип счета</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="recipientAccountCurrencyType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Валюта счета	</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:pattern value="([A-Z()\s]){2,10}"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="recipientBank" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Банк-получатель	</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="recipientBankBIC" type="BICType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>БИК банка-получателя	</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="recipientAccountId" type="AccountNumType">
+								<xs:annotation>
+									<xs:documentation>Номер счета	</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="currencyType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Код валюты	</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:pattern value="([A-Z()\s]){2,10}"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SrvUpdOperationRs">
+		<xs:annotation>
+			<xs:documentation>Сохранение атрибутов кассовой операции. Ответ</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="HeaderInfo" type="HeaderInfoType"/>
+				<xs:element name="SrvUpdOperationRsMessage">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="responseCode" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Код ответа</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="operationId" type="UUID32" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Номер кассовой операции</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="operationStatus" type="OpStatusType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Статус операции</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SrvRollbackOperationRq">
+		<xs:annotation>
+			<xs:documentation>Сторнирование кассовой операции. Запрос</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="HeaderInfo" type="HeaderInfoType"/>
+				<xs:element name="SrvRollbackOperationRqMessage">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="operationId" type="UUID32">
+								<xs:annotation>
+									<xs:documentation>Номер кассовой операции</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="rollbackReason" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Причина сторнирования операции</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SrvRollbackOperationRs">
+		<xs:annotation>
+			<xs:documentation>Сторнирование кассовой операции. Ответ</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="HeaderInfo" type="HeaderInfoType"/>
+				<xs:element name="SrvRollbackOperationRsMessage">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="responseCode" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Код ответа</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="operationId" type="UUID32" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Номер кассовой операции</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="operationStatus" type="OpStatusType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Статус операции</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SrvCommitOperationRq">
+		<xs:annotation>
+			<xs:documentation>Подтверждение операции Пользователем. Запрос</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="HeaderInfo" type="HeaderInfoType"/>
+				<xs:element name="SrvCommitOperationRqMessage">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="operationId" type="UUID32">
+								<xs:annotation>
+									<xs:documentation>Номер кассовой операции	</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SrvCommitOperationRs">
+		<xs:annotation>
+			<xs:documentation>Подтверждение операции Пользователем. Ответ</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="HeaderInfo" type="HeaderInfoType"/>
+				<xs:element name="SrvCommitOperationRsMessage">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="responseCode" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Код ответа</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="operationId" type="UUID32" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Номер кассовой операции</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="operationStatus" type="OpStatusType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Статус операции</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="committedDttm" type="xs:dateTime" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Дата выполнения операции</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SrvGetOperationRq">
+		<xs:annotation>
+			<xs:documentation>Получение кассовой операции. Запрос</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="HeaderInfo" type="HeaderInfoType"/>
+				<xs:element name="SrvGetOperationRqMessage">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="operationId" type="UUID32">
+								<xs:annotation>
+									<xs:documentation>Номер кассовой операции	</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="createdFrom" type="xs:dateTime" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Отбирать операции, созданные с </xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="createdTo" type="xs:dateTime" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Отбирать операции, созданные по </xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SrvGetOperationRs">
+		<xs:annotation>
+			<xs:documentation>Получение кассовой операции. Ответ</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="HeaderInfo" type="HeaderInfoType"/>
+				<xs:element name="SrvGetOperationRsMessage">
+					<xs:complexType>
+						<xs:sequence minOccurs="0" maxOccurs="unbounded">
+							<xs:element name="OperationItem">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="operationId" type="UUID32">
+											<xs:annotation>
+												<xs:documentation>Номер кассовой операции</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="cashOrderId" type="UUID32" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Номер заявки в ЕФС для кассового ордера</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="operationNum" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Номер документа ( = номеру ОВН только для приходной операции)</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:pattern value="([0-9]){1,9}"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="operationStatus" type="OpStatusType" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Статус операции</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="operationType" type="OperTypeLabel" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Код типа операции</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="workPlace_UId" type="UUID32" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Уникальный номер УРМ/Кассы	</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="createdDttm" type="xs:dateTime" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Дата создания операции</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="committedDttm" type="xs:dateTime" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Дата выполнения операции</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="senderAccountTypeId" type="AccountType" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Тип счета</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="senderAccountCurrencyType" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Валюта счета	</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:pattern value="([A-Z()\s]){2,10}"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="senderBank" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Банк-отправитель	</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="senderBankBIC" type="BICType" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>БИК банка-отправителя	</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="senderAccountId" type="AccountNumType">
+											<xs:annotation>
+												<xs:documentation>Номер счета	</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="amount" type="xs:decimal">
+											<xs:annotation>
+												<xs:documentation>Сумма</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="recipientAccountTypeId" type="AccountType" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Тип счета</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="recipientAccountCurrencyType" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Валюта счета	</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:pattern value="([A-Z()\s]){2,10}"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="recipientBank" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Банк-получатель	</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="recipientBankBIC" type="BICType" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>БИК банка-получателя	</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="recipientAccountId" type="AccountNumType">
+											<xs:annotation>
+												<xs:documentation>Номер счета	</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="currencyType" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Код валюты	</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:pattern value="([A-Z()\s]){2,10}"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="rollbackReason" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>Причина сторнирования операции</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SrvCreateCashOrderRq">
+		<xs:annotation>
+			<xs:documentation>Создание кассового ордера. Запрос</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="HeaderInfo" type="HeaderInfoType"/>
+				<xs:element name="SrvCreateCashOrderRqMessage">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="cashOrderId" type="UUID32">
+								<xs:annotation>
+									<xs:documentation>Номер заявки в ЕФС</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="operationType" type="OperTypeLabel">
+								<xs:annotation>
+									<xs:documentation>Код типа операции</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="cashOrderINum" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Номер документа ( = номеру ОВН только для приходной операции)</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:pattern value="([0-9]){1,9}"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="accountId" type="AccountNumType">
+								<xs:annotation>
+									<xs:documentation>Номер счета	</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="amount" type="xs:decimal">
+								<xs:annotation>
+									<xs:documentation>Сумма</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="amountInWords" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Сумма прописью</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="currencyType">
+								<xs:annotation>
+									<xs:documentation>Код валюты	</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:pattern value="([A-Z()\s]){2,10}"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="cashOrderStatus" type="CashOrderStatusType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Статус кассового ордера</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="workPlace_UId" type="UUID32">
+								<xs:annotation>
+									<xs:documentation>Уникальный номер УРМ/Кассы	</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="repData">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="repID" type="UUID32">
+											<xs:annotation>
+												<xs:documentation>Уникальный идентификатор представителя	</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="repFIO" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>ФИО представителя</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="address" type="xs:string" minOccurs="0"/>
+										<xs:element name="dateOfBirth" type="xs:date">
+											<xs:annotation>
+												<xs:documentation>Дата рождения	</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="identityDocumentType" minOccurs="0" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>Тип ДУЛ	</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:simpleContent>
+													<xs:extension base="IDDtype">
+														<xs:attribute name="series" use="required">
+															<xs:annotation>
+																<xs:documentation>Серия ДУЛ</xs:documentation>
+															</xs:annotation>
+															<xs:simpleType>
+																<xs:restriction base="xs:string">
+																	<xs:pattern value="([0-9]){1,10}"/>
+																</xs:restriction>
+															</xs:simpleType>
+														</xs:attribute>
+														<xs:attribute name="number" use="required">
+															<xs:annotation>
+																<xs:documentation>Номер ДУЛ</xs:documentation>
+															</xs:annotation>
+															<xs:simpleType>
+																<xs:restriction base="xs:string">
+																	<xs:pattern value="([0-9]){1,20}"/>
+																</xs:restriction>
+															</xs:simpleType>
+														</xs:attribute>
+														<xs:attribute name="issuedBy" type="xs:string">
+															<xs:annotation>
+																<xs:documentation>Кем выдан</xs:documentation>
+															</xs:annotation>
+														</xs:attribute>
+														<xs:attribute name="issuedDate" type="xs:date">
+															<xs:annotation>
+																<xs:documentation>Дата выдачи</xs:documentation>
+															</xs:annotation>
+														</xs:attribute>
+													</xs:extension>
+												</xs:simpleContent>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="placeOfBirth" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Место рождения	</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="resident" type="xs:boolean">
+											<xs:annotation>
+												<xs:documentation>Признак резидента</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="INN" type="INNType" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>ИНН	</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="additionalInfo">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="cashSymbols">
+											<xs:complexType>
+												<xs:sequence maxOccurs="unbounded">
+													<xs:element name="cashSymbolItem">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="cashSymbol" type="CashSymbolType">
+																	<xs:annotation>
+																		<xs:documentation>Кассовый   символ</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="cashSymbolAmount" type="xs:decimal">
+																	<xs:annotation>
+																		<xs:documentation>Сумма,   соответствующая кассовому символу</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="comment" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Комментарий (источник поступления/цель расхода)</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="subbranchCode" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>Код подразделения оператора</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="VSPCode" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Код ВСП оператора</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="OSBCode" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Код ОСБ оператора</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="GOSBCode" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Код ГОСБ оператора</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TBCode" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>Код ТБ оператора</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="account20202Num" type="AccountNumType">
+											<xs:annotation>
+												<xs:documentation>Счет № 20202 "Касса кредитных организаций"</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="userLogin" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>Логин оператора</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SrvCreateCashOrderRs">
+		<xs:annotation>
+			<xs:documentation>Создание кассового ордера. Ответ</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="HeaderInfo" type="HeaderInfoType"/>
+				<xs:element name="SrvCreateCashOrderRsMessage">
+					<xs:complexType>
+						<xs:choice>
+							<xs:element name="KO1">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="responseCode" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>Код ответа</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="responseMsg" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Response message</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="cashOrderId" type="UUID32" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Номер заявки в ЕФС</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="cashOrderINum" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Номер документа</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:pattern value="([0-9]){1,9}"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="cashOrderStatus" type="CashOrderStatusType" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Статус кассового ордера</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="cashOrderType" type="CashOrderType" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Тип кассового ордера</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="createdDttm" type="xs:dateTime" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Дата создания</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="operationId" type="UUID32" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Номер кассовой операции</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="repFIO" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>ФИО представителя</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="legalEntityShortName" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Сокращенное наименование ЮЛ	</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="INN" type="INNType" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>ИНН</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="amount" type="xs:decimal" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Сумма</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="accountId" type="AccountNumType" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Номер счета	</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="cashSymbols" minOccurs="0">
+											<xs:complexType>
+												<xs:sequence maxOccurs="unbounded">
+													<xs:element name="cashSymbolItem">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="cashSymbol" type="CashSymbolType">
+																	<xs:annotation>
+																		<xs:documentation>Кассовый   символ</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="cashSymbolAmount" type="xs:decimal">
+																	<xs:annotation>
+																		<xs:documentation>Сумма,   соответствующая кассовому символу</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="senderBank" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Банк-отправитель	</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="senderBankBIC" type="BICType" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>БИК банка-отправителя	</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="recipientBank" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Банк-получатель	</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="recipientBankBIC" type="BICType" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>БИК банка-получателя	</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="clientTypeFK" type="xs:boolean" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Признак типа клиента ФК/ОФК/УОВФ	</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="fDestLEName" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Наименование организации в ФК/ОФК/УОВФ	</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="operatorPosition" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Должность оператора	</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="userFullName" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation> Фамилия и инициалы кассового работника</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="userPosition" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Должность кассового работника</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="KO2">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="responseCode" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>Код ответа</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="responseMsg" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Response message</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="checkId" type="UUID32" minOccurs="0"/>
+										<xs:element name="checkSeries" minOccurs="0">
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:pattern value="([A-Я]){2}"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="checkNumber" minOccurs="0">
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:pattern value="([0-9]){7}"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:choice>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SrvUpdStCashOrderRq">
+		<xs:annotation>
+			<xs:documentation>Обновление статуса кассового ордера. Запрос</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="HeaderInfo" type="HeaderInfoType"/>
+				<xs:element name="SrvUpdCashOrderRqMessage">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="cashOrderId">
+								<xs:annotation>
+									<xs:documentation>Номер кассового ордера</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:pattern value="([0-9]){1,9}"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="cashOrderStatus" type="CashOrderStatusType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Статус кассового ордера</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SrvUpdStCashOrderRs">
+		<xs:annotation>
+			<xs:documentation>Обновление статуса кассового ордера. Ответ</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="HeaderInfo" type="HeaderInfoType"/>
+				<xs:element name="SrvUpdCashOrderRsMessage">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="responseCode" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Код ответа</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="responseMsg" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Response message</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="cashOrderId" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Номер заявки в ЕФС</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:pattern value="([0-9]){1,9}"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="cashOrderINum" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Номер кассового ордера</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:pattern value="([0-9]){1,9}"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="cashOrderStatus" type="CashOrderStatusType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Статус кассового ордера</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="cashOrderType" type="CashOrderType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Тип кассового ордера</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:simpleType name="UUID32">
+		<xs:annotation>
+			<xs:documentation>UUID без разделителей. Набор из 32 символов [0-9], [a-f] или [A-F], без разделителей
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([0-9a-fA-F]){32}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="OperTypeLabel">
+		<xs:annotation>
+			<xs:documentation>Тип операции</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ToCardDeposit"/>
+			<xs:enumeration value="FromCardWithdraw"/>
+			<xs:enumeration value="ToAccountDepositRub"/>
+			<xs:enumeration value="FromAccountWithdrawRub"/>
+			<xs:enumeration value="CheckbookIssuing"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CashOrderStatusType">
+		<xs:annotation>
+			<xs:documentation>Статус кассового ордера: Created, Committed</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Created"/>
+			<xs:enumeration value="Committed"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="INNType">
+		<xs:annotation>
+			<xs:documentation>Номер ИНН. Набор символов [0-9], Min 10 Max 12</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="10"/>
+			<xs:maxLength value="12"/>
+			<xs:pattern value="([0-9]){10,12}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AccountNumType">
+		<xs:annotation>
+			<xs:documentation>Номер счета без разделителей. Набор из 20 символов [0-9]</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="20"/>
+			<xs:pattern value="[0-9]{20}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="BICType">
+		<xs:annotation>
+			<xs:documentation>Номер БИК. Набор из 9 символов [0-9]</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:length value="9"/>
+			<xs:pattern value="([0-9]){9}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="OGRNType">
+		<xs:annotation>
+			<xs:documentation>Номер ОГРН. Набор символов [0-9], Min 13 Max 15</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="13"/>
+			<xs:maxLength value="15"/>
+			<xs:pattern value="([0-9])"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CashSymbolType">
+		<xs:annotation>
+			<xs:documentation>Кассовый символ</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="(0-9){2,3}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="KPPType">
+		<xs:annotation>
+			<xs:documentation>Номер КПП. Набор из 9 символов [0-9]</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9]{9}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="OperCatType">
+		<xs:annotation>
+			<xs:documentation>Категория операции 0 - расходная, 1 - приходная, 2 - не применимо</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:pattern value=""/>
+			<xs:enumeration value="0"/>
+			<xs:enumeration value="1"/>
+			<xs:enumeration value="2"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="IDDtype">
+		<xs:annotation>
+			<xs:documentation>Тип ДУЛ: passport, internpassport, militaryID, seamenId</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="passport"/>
+			<xs:enumeration value="internpassport"/>
+			<xs:enumeration value="militaryID"/>
+			<xs:enumeration value="seamenId"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AccountType">
+		<xs:annotation>
+			<xs:documentation>Тип счета: расчётный (01), бюджетный (03),  транзитный   (04),  ссудный (05)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value=""/>
+			<xs:enumeration value="01"/>
+			<xs:enumeration value="03"/>
+			<xs:enumeration value="04"/>
+			<xs:enumeration value="05"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="OpStatusType">
+		<xs:annotation>
+			<xs:documentation>Статус операции(транзакции): New, AdvanceReservation, Committed, Cancelled</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="New"/>
+			<xs:enumeration value="AdvanceReservation"/>
+			<xs:enumeration value="Committed"/>
+			<xs:enumeration value="Cancelled"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CashOrderType">
+		<xs:annotation>
+			<xs:documentation>Тип кассового ордера. 'KO1' - приходный , 'KO2' - расходный</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="KO1"/>
+			<xs:enumeration value="KO2"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LimitStatusType">
+		<xs:annotation>
+			<xs:documentation>Статус проверки лимитов</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="LIMIT_ERROR"/>
+			<xs:enumeration value="LIMIT_PASSED"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

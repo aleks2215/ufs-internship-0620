@@ -1,0 +1,296 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Компонент CardAccountForm совпадает со своим снимком 1`] = `
+<div>
+  <div
+    class="ant-row"
+  >
+    <div
+      class="ant-col-10"
+    >
+      undefined undefined
+    </div>
+    <div
+      class="ant-col-8 rightAligned"
+    >
+      VISA undefined
+    </div>
+  </div>
+  <div
+    class="ant-row"
+  >
+    <div
+      class="ant-col-18"
+    >
+      <div
+        class="ant-collapse accountCard"
+      >
+        <div
+          class="ant-collapse-item"
+        >
+          <div
+            aria-expanded="false"
+            class="ant-collapse-header"
+            role="tab"
+          >
+            <i
+              class="arrow"
+            />
+            Общая информаци о юридическом лице
+          </div>
+        </div>
+        <div
+          class="ant-collapse-item ant-collapse-item-active"
+        >
+          <div
+            aria-expanded="true"
+            class="ant-collapse-header"
+            role="tab"
+          >
+            <i
+              class="arrow"
+            />
+            Общая информация по счету
+          </div>
+          <div
+            class="ant-collapse-content ant-collapse-content-active"
+            role="tabpanel"
+          >
+            <div
+              class="ant-collapse-content-box"
+            >
+              <div
+                class="ant-row"
+              >
+                <div
+                  class="ant-col-23"
+                >
+                  <div
+                    class="ant-row pairRow"
+                  >
+                    <div
+                      class="ant-col-8 rightAligned bold"
+                    >
+                      Номер счета
+                    </div>
+                    <div
+                      class="ant-col-16"
+                    >
+                      4782 9871 9873 897009
+                    </div>
+                  </div>
+                  <div
+                    class="ant-row pairRow"
+                  >
+                    <div
+                      class="ant-col-8 rightAligned bold"
+                    >
+                      Вид
+                    </div>
+                    <div
+                      class="ant-col-16"
+                    >
+                      Расчетный счет
+                    </div>
+                  </div>
+                  <div
+                    class="ant-row pairRow"
+                  >
+                    <div
+                      class="ant-col-8 rightAligned bold"
+                    >
+                      Номер договора
+                    </div>
+                    <div
+                      class="ant-col-16"
+                    >
+                      124567
+                    </div>
+                  </div>
+                  <div
+                    class="ant-row pairRow"
+                  >
+                    <div
+                      class="ant-col-8 rightAligned bold"
+                    >
+                      Текущий остаток
+                    </div>
+                    <div
+                      class="ant-col-16"
+                    >
+                      1
+                    </div>
+                  </div>
+                  <div
+                    class="ant-row pairRow"
+                  >
+                    <div
+                      class="ant-col-8 rightAligned bold"
+                    >
+                      Валюта
+                    </div>
+                    <div
+                      class="ant-col-16"
+                    >
+                      RUB
+                    </div>
+                  </div>
+                  <div
+                    class="ant-row pairRow"
+                  >
+                    <div
+                      class="ant-col-8 rightAligned bold"
+                    >
+                      Дата последней операции
+                    </div>
+                    <div
+                      class="ant-col-16"
+                    >
+                      18.06.2001
+                    </div>
+                  </div>
+                  <div
+                    class="ant-row pairRow"
+                  >
+                    <div
+                      class="ant-col-8 rightAligned bold"
+                    >
+                      Статус
+                    </div>
+                    <div
+                      class="ant-col-16"
+                    >
+                      <div
+                        class="ant-row red"
+                      >
+                        <div
+                          class="ant-col-8"
+                        >
+                          Неактивный
+                        </div>
+                        <div
+                          class="ant-col-10 rightAligned"
+                        >
+                          <button
+                            class="ant-btn green noBorder"
+                            type="button"
+                          >
+                            <span>
+                              Подробнее
+                            </span>
+                          </button>
+                        </div>
+                        <div
+                          class="ant-col-6"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="ant-collapse-item"
+        >
+          <div
+            aria-expanded="false"
+            class="ant-collapse-header"
+            role="tab"
+          >
+            <i
+              class="arrow"
+            />
+            Картотека №1 - 2 ожидают утверждения
+          </div>
+        </div>
+        <div
+          class="ant-collapse-item"
+        >
+          <div
+            aria-expanded="false"
+            class="ant-collapse-header"
+            role="tab"
+          >
+            <i
+              class="arrow"
+            />
+            Картотека №2 - 1 в очереди
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="ant-col-6"
+    >
+      <div
+        class="ant-collapse accountCard"
+      >
+        <div
+          class="ant-collapse-item ant-collapse-item-active"
+        >
+          <div
+            aria-expanded="true"
+            class="ant-collapse-header"
+            role="tab"
+          >
+            <i
+              class="arrow"
+            />
+            <div
+              class="ant-row"
+            >
+              <div
+                class="ant-col-21"
+              />
+              <div
+                class="ant-col-3"
+              >
+                <button
+                  class="ant-btn ant-btn-circle"
+                  type="button"
+                >
+                  <span>
+                    X
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div
+            class="ant-collapse-content ant-collapse-content-active"
+            role="tabpanel"
+          >
+            <div
+              class="ant-collapse-content-box"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="ant-row"
+  >
+    <div
+      class="ant-col-18 rightAligned"
+    >
+      <button
+        class="ant-btn ant-btn-primary"
+        type="button"
+      >
+        <span>
+          Далее
+        </span>
+        <i
+          class="anticon anticon-right"
+        />
+      </button>
+    </div>
+    <div
+      class="ant-col-6"
+    />
+  </div>
+</div>
+`;

@@ -1,0 +1,138 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Компонент <OvnSelectForm /> совпадает со своим снимком 1`] = `
+<div>
+  <section
+    class="section"
+  >
+    <div
+      class="header"
+    >
+      Объявления на взнос наличными
+    </div>
+    <div
+      class="container"
+    >
+      <div
+        class="ant-table-wrapper"
+      >
+        <div
+          class="ant-spin-nested-loading"
+        >
+          <div
+            class="ant-spin-container"
+          >
+            <div
+              class="ant-table ant-table-large ant-table-empty ant-table-scroll-position-left"
+            >
+              <div
+                class="ant-table-content"
+              >
+                <div
+                  class="ant-table-body"
+                >
+                  <table
+                    class=""
+                  >
+                    <colgroup>
+                      <col />
+                      <col />
+                      <col />
+                      <col />
+                      <col />
+                      <col />
+                      <col />
+                    </colgroup>
+                    <thead
+                      class="ant-table-thead"
+                    >
+                      <tr>
+                        <th
+                          class="ant-table-selection-column"
+                        >
+                          <span />
+                        </th>
+                        <th
+                          class=""
+                        >
+                          <span>
+                            № ОВН
+                          </span>
+                        </th>
+                        <th
+                          class=""
+                        >
+                          <span>
+                            Сумма
+                          </span>
+                        </th>
+                        <th
+                          class=""
+                        >
+                          <span>
+                            Дата создания
+                          </span>
+                        </th>
+                        <th
+                          class=""
+                        >
+                          <span>
+                            ИНН
+                          </span>
+                        </th>
+                        <th
+                          class=""
+                        >
+                          <span>
+                            Наименование ЮЛ
+                          </span>
+                        </th>
+                        <th
+                          class=""
+                        >
+                          <span>
+                            Представитель
+                          </span>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody
+                      class="ant-table-tbody"
+                    />
+                  </table>
+                </div>
+                <div
+                  class="ant-table-placeholder"
+                >
+                  Данные отсутствуют
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div
+    class="ant-row rightAligned"
+  >
+    <button
+      class="ant-btn greenButton"
+      type="button"
+    >
+      <span>
+        Создать новую операцию
+      </span>
+    </button>
+    <button
+      class="ant-btn"
+      disabled=""
+      type="button"
+    >
+      <span>
+        На основании выбранного ОВН
+      </span>
+    </button>
+  </div>
+</div>
+`;

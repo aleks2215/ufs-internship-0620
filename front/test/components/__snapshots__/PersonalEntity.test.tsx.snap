@@ -1,0 +1,142 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Компонент PersonalEntity совпадает со своим снимком 1`] = `
+<div
+  class="ant-row"
+>
+  <div
+    class="ant-col-23"
+  >
+    <div
+      class="ant-row pairRow"
+    >
+      <div
+        class="ant-col-8 rightAligned bold"
+      >
+        Номер счета
+      </div>
+      <div
+        class="ant-col-16"
+      >
+        1
+      </div>
+    </div>
+    <div
+      class="ant-row pairRow"
+    >
+      <div
+        class="ant-col-8 rightAligned bold"
+      >
+        Вид
+      </div>
+      <div
+        class="ant-col-16"
+      >
+        Расчетный счет
+      </div>
+    </div>
+    <div
+      class="ant-row pairRow"
+    >
+      <div
+        class="ant-col-8 rightAligned bold"
+      >
+        Номер договора
+      </div>
+      <div
+        class="ant-col-16"
+      >
+        1
+      </div>
+    </div>
+    <div
+      class="ant-row pairRow"
+    >
+      <div
+        class="ant-col-8 rightAligned bold"
+      >
+        Текущий остаток
+      </div>
+      <div
+        class="ant-col-16"
+      >
+        1
+      </div>
+    </div>
+    <div
+      class="ant-row pairRow"
+    >
+      <div
+        class="ant-col-8 rightAligned bold"
+      >
+        Валюта
+      </div>
+      <div
+        class="ant-col-16"
+      >
+        RUB
+      </div>
+    </div>
+    <div
+      class="ant-row pairRow"
+    >
+      <div
+        class="ant-col-8 rightAligned bold"
+      >
+        Дата последней операции
+      </div>
+      <div
+        class="ant-col-16"
+      >
+        1
+      </div>
+    </div>
+    <div
+      class="ant-row pairRow"
+    >
+      <div
+        class="ant-col-8 rightAligned bold"
+      >
+        Статус
+      </div>
+      <div
+        class="ant-col-16"
+      >
+        <div
+          class="ant-row red"
+        >
+          <div
+            class="ant-col-8"
+          >
+            Неактивный
+          </div>
+          <div
+            class="ant-col-10 rightAligned"
+          >
+            <button
+              class="ant-btn green noBorder"
+              type="button"
+            >
+              <span>
+                Подробнее
+              </span>
+            </button>
+          </div>
+          <div
+            class="ant-col-6"
+          >
+            <button
+              class="ant-btn red noBorder"
+              type="button"
+            >
+              <span>
+                Арест суммы
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

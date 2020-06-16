@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>ufs-hazelcast</artifactId>
+  <version>1.0</version>
+  <packaging>war</packaging>
+
+  <name>UFS Hazelcast server</name>
+
+  <parent>
+    <groupId>ru.philit.ufs</groupId>
+    <artifactId>ufs-webapps</artifactId>
+    <version>1.0</version>
+  </parent>
+
+  <dependencies>
+    <!-- Model -->
+    <dependency>
+      <groupId>ru.philit.ufs</groupId>
+      <artifactId>ufs-model</artifactId>
+      <version>${ufs.model.version}</version>
+    </dependency>
+
+    <!-- UFS Common -->
+    <dependency>
+      <groupId>ru.philit.ufs</groupId>
+      <artifactId>ufs-common</artifactId>
+      <version>${ufs.common.version}</version>
+    </dependency>
+
+    <!-- JMS -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jms</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+
+    <!-- Hazelcast -->
+    <dependency>
+      <groupId>com.hazelcast</groupId>
+      <artifactId>hazelcast</artifactId>
+      <version>${hazelcast.version}</version>
+    </dependency>
+    <!--<dependency>
+      <groupId>com.hazelcast</groupId>
+      <artifactId>hazelcast-spring</artifactId>
+      <version>${hazelcast.version}</version>
+    </dependency>-->
+  </dependencies>
+
+</project>

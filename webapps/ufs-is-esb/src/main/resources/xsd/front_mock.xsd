@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 (http://www.altova.com) by  () -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:complexType name="HeaderInfoType">
+		<xs:annotation>
+			<xs:documentation>Заголовок сообщений</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="rqUID" type="UUID32">
+				<xs:annotation>
+					<xs:documentation>Уникальный идентификатор запроса</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="rqTm" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>Дата и время передачи запроса</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="spName" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Идентификатор системы, инициировавший запроc</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="systemId" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Идентификатор системы-получателя запроса</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="SrvGetClientCardInfoRs">
+		<xs:annotation>
+			<xs:documentation>Получение информации о карте </xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="HeadInfo" type="HeaderInfoType"/>
+				<xs:element name="SrvGetClientCardInfoRsMessage">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="сardNumber" type="CardNumType">
+								<xs:annotation>
+									<xs:documentation>Номер карты</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="cardExpDate" type="xs:date">
+								<xs:annotation>
+									<xs:documentation>действителен до</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="cardIssuingNetworkCode" type="xs:integer">
+								<xs:annotation>
+									<xs:documentation>0 -  Visa, 1 - MasterCard, 2 - Maestro, 3 - American Express</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="cardTypeId" type="xs:integer">
+								<xs:annotation>
+									<xs:documentation>0 - дебетовая, 1 - кредитная</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="cardOwnerFirstName">
+								<xs:annotation>
+									<xs:documentation>Имя владельца карты</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:pattern value="([A-Z])"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="cardOwnerLastName">
+								<xs:annotation>
+									<xs:documentation>Фамилия владельца карты</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="20"/>
+										<xs:pattern value="([A-Z])"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:simpleType name="UUID32">
+		<xs:annotation>
+			<xs:documentation>UUID без разделителей. Набор из 32 символов [0-9], [a-f] или [A-F], без разделителей
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([0-9a-fA-F]){32}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CardNumType">
+		<xs:annotation>
+			<xs:documentation>Номер карты без разделителей. Набор из 16 символов [0-9]</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([0-9]){16}"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

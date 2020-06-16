@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Компонент AcceptPosForm совпадает со своим снимком 1`] = `
+<div>
+  <div
+    class="ant-row"
+  >
+    <div
+      class="ant-col-8"
+    />
+    <div
+      class="ant-col-8"
+    >
+      <form
+        class="ant-form ant-form-horizontal"
+      >
+        <div
+          class="ant-row ant-form-item"
+        >
+          <div
+            class="ant-form-item-control-wrapper"
+          >
+            <div
+              class="ant-form-item-control "
+            >
+              <div
+                class="ant-alert ant-alert-info ant-alert-with-description"
+                data-show="true"
+              >
+                <i
+                  class="anticon anticon-info-circle-o ant-alert-icon"
+                />
+                <span
+                  class="ant-alert-message"
+                >
+                  Подтверждение операции клиентом на POS-терминале
+                </span>
+                <span
+                  class="ant-alert-description"
+                >
+                  Подтвердите операцию на сумму 100 руб. 00 коп.
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="ant-row ant-form-item rightAligned"
+        >
+          <div
+            class="ant-form-item-control-wrapper"
+          >
+            <div
+              class="ant-form-item-control "
+            >
+              <button
+                class="ant-btn ant-btn-lg redButton"
+                type="button"
+              >
+                <span>
+                  Отмена
+                </span>
+              </button>
+              <button
+                class="ant-btn ant-btn-lg greenButton"
+                type="button"
+              >
+                <span>
+                  Подтвердить
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div
+      class="ant-col-8"
+    />
+  </div>
+</div>
+`;

@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Компонент <Section /> совпадает со своим снимком 1`] = `
+<section
+  class="section"
+>
+  <div
+    class="header"
+  >
+    hi
+  </div>
+  <div
+    class="container"
+  >
+    <textarea />
+  </div>
+</section>
+`;

@@ -1,0 +1,221 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Компонент PendingOperationsForm совпадает со своим снимком 1`] = `
+<div>
+  <div
+    class="ant-row"
+  >
+    <span
+      class="label"
+    >
+      Введите данные по клиенту
+    </span>
+  </div>
+  <div
+    class="ant-row"
+    style="margin-top:15px;"
+  >
+    <div
+      class="ant-col-4"
+    >
+      <span
+        class="label"
+      >
+        Фамилия
+      </span>
+    </div>
+    <div
+      class="ant-col-16 ant-col-offset-1"
+    >
+      <div
+        class="ant-row ant-form-item"
+      >
+        <div
+          class="ant-form-item-control-wrapper"
+        >
+          <div
+            class="ant-form-item-control "
+          >
+            <input
+              class="ant-input ant-input-lg"
+              type="text"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="ant-row"
+  >
+    <div
+      class="ant-col-4"
+    >
+      <span
+        class="label"
+      >
+        Имя
+      </span>
+    </div>
+    <div
+      class="ant-col-16 ant-col-offset-1"
+    >
+      <div
+        class="ant-row ant-form-item"
+      >
+        <div
+          class="ant-form-item-control-wrapper"
+        >
+          <div
+            class="ant-form-item-control "
+          >
+            <input
+              class="ant-input ant-input-lg"
+              type="text"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="ant-row"
+  >
+    <div
+      class="ant-col-4"
+    >
+      <span
+        class="label"
+      >
+        Отчество
+      </span>
+    </div>
+    <div
+      class="ant-col-16 ant-col-offset-1"
+    >
+      <div
+        class="ant-row ant-form-item"
+      >
+        <div
+          class="ant-form-item-control-wrapper"
+        >
+          <div
+            class="ant-form-item-control "
+          >
+            <input
+              class="ant-input ant-input-lg"
+              type="text"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="ant-row"
+    style="margin-top:15px;"
+  >
+    <span
+      class="label"
+    >
+      Введите данные ДУЛ: 
+    </span>
+  </div>
+  <div
+    class="ant-row"
+  >
+    <div
+      class="ant-col-4"
+    >
+      <span
+        class="label"
+      >
+        Тип ДУЛ
+      </span>
+    </div>
+    <div
+      class="ant-col-16 ant-col-offset-1"
+    >
+      <div
+        class="ant-select ant-select-enabled"
+        style="display:block;"
+      >
+        <div
+          aria-autocomplete="list"
+          aria-expanded="false"
+          aria-haspopup="true"
+          class="ant-select-selection
+                    ant-select-selection--single"
+          role="combobox"
+          tabindex="0"
+        >
+          <div
+            class="ant-select-selection__rendered"
+          >
+            <div
+              class="ant-select-selection-selected-value"
+              style="display:block;opacity:1;"
+              title="Паспорт гражданина РФ"
+            >
+              Паспорт гражданина РФ
+            </div>
+          </div>
+          <span
+            class="ant-select-arrow"
+            style="user-select:none;-webkit-user-select:none;"
+            unselectable="unselectable"
+          >
+            <b />
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="ant-row"
+  >
+    <div
+      class="ant-col-4 label"
+    >
+      <div
+        class="ant-row ant-form-item"
+      >
+        <div
+          class="ant-form-item-control-wrapper"
+        >
+          <div
+            class="ant-form-item-control "
+          >
+            <input
+              class="ant-input ant-input-lg"
+              placeholder="Серия"
+              type="text"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="ant-col-16 ant-col-offset-1"
+    >
+      <div
+        class="ant-row ant-form-item"
+      >
+        <div
+          class="ant-form-item-control-wrapper"
+        >
+          <div
+            class="ant-form-item-control "
+          >
+            <input
+              class="ant-input ant-input-lg"
+              placeholder="Номер"
+              type="text"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

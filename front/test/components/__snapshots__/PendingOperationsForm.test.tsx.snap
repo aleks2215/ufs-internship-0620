@@ -1,0 +1,432 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Компонент PendingOperationsForm совпадает со своим снимком 1`] = `
+<div
+  class="ant-layout"
+  style="margin-top:12px;"
+>
+  <div
+    class="ant-row"
+    style="margin-bottom:8px;"
+  >
+    <div
+      class="ant-col-24"
+    >
+      <div
+        class="autocomplete ant-select-show-search ant-select-auto-complete ant-select ant-select-combobox ant-select-enabled ant-select-allow-clear"
+      >
+        <div
+          aria-autocomplete="list"
+          aria-expanded="false"
+          aria-haspopup="true"
+          class="ant-select-selection
+                    ant-select-selection--single"
+          role="combobox"
+        >
+          <div
+            class="ant-select-selection__rendered"
+          >
+            <ul>
+              <li
+                class="ant-select-search ant-select-search--inline"
+              >
+                <div
+                  class="ant-select-search__field__wrap"
+                >
+                  <span
+                    class="ant-input-affix-wrapper"
+                  >
+                    <span
+                      class="ant-input-prefix"
+                    >
+                      <i
+                        class="anticon anticon-search icon"
+                      />
+                    </span>
+                    <input
+                      class="ant-input ant-input ant-select-search__field"
+                      placeholder="Id пакета..."
+                      type="text"
+                      value=""
+                    />
+                  </span>
+                  <span
+                    class="ant-select-search__field__mirror"
+                  >
+                     
+                  </span>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <span
+            class="ant-select-selection__clear"
+            style="user-select:none;-webkit-user-select:none;display:none;"
+            unselectable="unselectable"
+          />
+          <span
+            class="ant-select-arrow"
+            style="user-select:none;-webkit-user-select:none;"
+            unselectable="unselectable"
+          >
+            <b />
+          </span>
+        </div>
+      </div>
+      <div
+        class="autocomplete ant-select-show-search ant-select-auto-complete ant-select ant-select-combobox ant-select-enabled ant-select-allow-clear"
+      >
+        <div
+          aria-autocomplete="list"
+          aria-expanded="false"
+          aria-haspopup="true"
+          class="ant-select-selection
+                    ant-select-selection--single"
+          role="combobox"
+        >
+          <div
+            class="ant-select-selection__rendered"
+          >
+            <ul>
+              <li
+                class="ant-select-search ant-select-search--inline"
+              >
+                <div
+                  class="ant-select-search__field__wrap"
+                >
+                  <span
+                    class="ant-input-affix-wrapper"
+                  >
+                    <span
+                      class="ant-input-prefix"
+                    >
+                      <i
+                        class="anticon anticon-search icon"
+                      />
+                    </span>
+                    <input
+                      class="ant-input ant-input ant-select-search__field"
+                      placeholder="Id операции..."
+                      type="text"
+                      value=""
+                    />
+                  </span>
+                  <span
+                    class="ant-select-search__field__mirror"
+                  >
+                     
+                  </span>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <span
+            class="ant-select-selection__clear"
+            style="user-select:none;-webkit-user-select:none;display:none;"
+            unselectable="unselectable"
+          />
+          <span
+            class="ant-select-arrow"
+            style="user-select:none;-webkit-user-select:none;"
+            unselectable="unselectable"
+          >
+            <b />
+          </span>
+        </div>
+      </div>
+      <button
+        class="ant-btn ant-btn-primary"
+        style="float:right;"
+        type="button"
+      >
+        <span>
+          Поиск по клиенту/представителю
+        </span>
+      </button>
+    </div>
+  </div>
+  <div
+    class="ant-row"
+  >
+    <section
+      class="section"
+    >
+      <div
+        class="header"
+      >
+        Незавершенные операции
+      </div>
+      <div
+        class="container"
+      >
+        <div
+          class="ant-table-wrapper"
+        >
+          <div
+            class="ant-spin-nested-loading"
+          >
+            <div
+              class="ant-spin-container"
+            >
+              <div
+                class="ant-table ant-table-large ant-table-scroll-position-left"
+              >
+                <div
+                  class="ant-table-content"
+                >
+                  <div
+                    class="ant-table-body"
+                  >
+                    <table
+                      class=""
+                    >
+                      <colgroup>
+                        <col />
+                        <col />
+                        <col />
+                        <col />
+                        <col />
+                        <col />
+                        <col />
+                        <col />
+                        <col />
+                      </colgroup>
+                      <thead
+                        class="ant-table-thead"
+                      >
+                        <tr>
+                          <th
+                            class="ant-table-selection-column"
+                          >
+                            <span />
+                          </th>
+                          <th
+                            class=""
+                          >
+                            <span>
+                              ID пакета
+                            </span>
+                          </th>
+                          <th
+                            class=""
+                          >
+                            <span>
+                              ID задачи
+                            </span>
+                          </th>
+                          <th
+                            class=""
+                          >
+                            <span>
+                              Клиент
+                            </span>
+                          </th>
+                          <th
+                            class=""
+                          >
+                            <span>
+                              ФИО Клиента/Представителя
+                            </span>
+                          </th>
+                          <th
+                            class=""
+                          >
+                            <span>
+                              Дата/время
+                            </span>
+                          </th>
+                          <th
+                            class=""
+                          >
+                            <span>
+                              Номер счета
+                            </span>
+                          </th>
+                          <th
+                            class=""
+                          >
+                            <span>
+                              Сумма
+                            </span>
+                          </th>
+                          <th
+                            class=""
+                          >
+                            <span>
+                              Тип операции
+                            </span>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody
+                        class="ant-table-tbody"
+                      >
+                        <tr
+                          class="ant-table-row  ant-table-row-level-0"
+                        >
+                          <td
+                            class="ant-table-selection-column"
+                          >
+                            <span>
+                              <label
+                                class="ant-radio-wrapper"
+                              >
+                                <span
+                                  class="ant-radio"
+                                >
+                                  <input
+                                    class="ant-radio-input"
+                                    type="radio"
+                                  />
+                                  <span
+                                    class="ant-radio-inner"
+                                  />
+                                </span>
+                              </label>
+                            </span>
+                          </td>
+                          <td
+                            class=""
+                          >
+                            <span
+                              class="ant-table-row-indent indent-level-0"
+                              style="padding-left:0px;"
+                            />
+                          </td>
+                          <td
+                            class=""
+                          >
+                            1
+                          </td>
+                          <td
+                            class=""
+                          />
+                          <td
+                            class=""
+                          />
+                          <td
+                            class=""
+                          />
+                          <td
+                            class=""
+                          />
+                          <td
+                            class=""
+                          />
+                          <td
+                            class=""
+                          >
+                            Взнос наличных на счет корпоративной/бюджетной карты
+                          </td>
+                        </tr>
+                        <tr
+                          class="ant-table-row  ant-table-row-level-0"
+                        >
+                          <td
+                            class="ant-table-selection-column"
+                          >
+                            <span>
+                              <label
+                                class="ant-radio-wrapper"
+                              >
+                                <span
+                                  class="ant-radio"
+                                >
+                                  <input
+                                    class="ant-radio-input"
+                                    type="radio"
+                                  />
+                                  <span
+                                    class="ant-radio-inner"
+                                  />
+                                </span>
+                              </label>
+                            </span>
+                          </td>
+                          <td
+                            class=""
+                          >
+                            <span
+                              class="ant-table-row-indent indent-level-0"
+                              style="padding-left:0px;"
+                            />
+                          </td>
+                          <td
+                            class=""
+                          >
+                            2
+                          </td>
+                          <td
+                            class=""
+                          />
+                          <td
+                            class=""
+                          />
+                          <td
+                            class=""
+                          />
+                          <td
+                            class=""
+                          />
+                          <td
+                            class=""
+                          />
+                          <td
+                            class=""
+                          >
+                            Взнос наличных на счет корпоративной/бюджетной карты
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <ul
+                class="ant-pagination ant-table-pagination"
+                unselectable="unselectable"
+              >
+                <li
+                  aria-disabled="true"
+                  class="ant-pagination-disabled ant-pagination-prev"
+                  title="上一页"
+                >
+                  <a />
+                </li>
+                <li
+                  class="ant-pagination-item ant-pagination-item-1 ant-pagination-item-active"
+                  title="1"
+                >
+                  <a>
+                    1
+                  </a>
+                </li>
+                <li
+                  aria-disabled="true"
+                  class="ant-pagination-disabled ant-pagination-next"
+                  title="下一页"
+                >
+                  <a />
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div
+    class="ant-row rightAligned"
+  >
+    <button
+      class="ant-btn"
+      disabled=""
+      type="button"
+    >
+      <span>
+        Открыть операцию
+      </span>
+    </button>
+  </div>
+</div>
+`;

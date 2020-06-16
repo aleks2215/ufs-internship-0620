@@ -1,0 +1,58 @@
+@import "../Shared";
+
+.panel {
+  :global {
+    .ant-collapse-item {
+      background: #ffffff;
+    }
+    .ant-collapse-item-active > .ant-collapse-header {
+      background: @green;
+      color: #ffffff;
+    }
+  }
+}
+
+.rightAligned {
+  padding-right: 10px;
+  text-align: right;
+  :global .ant-row {
+    text-align: right;
+  }
+}
+
+.subHead {
+  height: 36px;
+}
+
+.transactionCard {
+  :global .ant-row {
+
+  }
+}
+
+.label {
+  padding-left: 10px;
+  vertical-align: middle;
+  line-height: 32px;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.fullwidth {
+  width: 100%;
+  text-decoration: underline;
+}
+
+.bordered {
+  border: 1px solid #e9e9e9;
+  text-align: center;
+}
+
+.sticked {
+  margin-bottom: 0;
+}
+
+.disabledInputRow {
+  margin-bottom: 5px;
+}

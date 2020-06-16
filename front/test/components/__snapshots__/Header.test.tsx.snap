@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Компонент Header совпадает со своим снимком 1`] = `
+<div
+  class="login"
+>
+  <div
+    class="initials"
+  >
+    <span>
+      1 1 1
+    </span>
+    <a
+      href="#/"
+    >
+      <i
+        class="anticon anticon-logout logout"
+      />
+    </a>
+  </div>
+  <div
+    class="position"
+  >
+    1
+  </div>
+</div>
+`;

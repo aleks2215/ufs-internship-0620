@@ -1,0 +1,107 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Компонент AcceptOperationForm совпадает со своим снимком 1`] = `
+<div
+  class="ant-col-16"
+>
+  <section
+    class="section"
+  >
+    <div
+      class="header"
+    >
+      Прием наличности
+    </div>
+    <div
+      class="container"
+    >
+      <div
+        class="ant-row"
+      >
+        <div
+          class="ant-row ant-form-item formItem"
+        >
+          <div
+            class="ant-col-4 ant-form-item-label"
+          >
+            <label
+              class=""
+              title="Сумма к приему"
+            >
+              Сумма к приему
+            </label>
+          </div>
+          <div
+            class="ant-col-16 ant-form-item-control-wrapper"
+          >
+            <div
+              class="ant-form-item-control "
+            >
+              <input
+                class="ant-input ant-input-lg bold"
+                disabled=""
+                type="text"
+                value="100,00"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          class="ant-row ant-form-item formItem"
+        >
+          <div
+            class="ant-col-4 ant-form-item-label"
+          >
+            <label
+              class=""
+              title="Сумма прописью"
+            >
+              Сумма прописью
+            </label>
+          </div>
+          <div
+            class="ant-col-16 ant-form-item-control-wrapper"
+          >
+            <div
+              class="ant-form-item-control "
+            >
+              <input
+                class="ant-input ant-input-lg bold"
+                disabled=""
+                type="text"
+                value="сто рублей 00 коп."
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div
+    class="ant-row rightAligned"
+  >
+    <button
+      class="ant-btn ant-btn-loading greenButton"
+      type="button"
+    >
+      <i
+        class="anticon anticon-spin anticon-loading"
+      />
+      <span>
+        Завершить операцию
+      </span>
+    </button>
+    <button
+      class="ant-btn ant-btn-loading redButton"
+      type="button"
+    >
+      <i
+        class="anticon anticon-spin anticon-loading"
+      />
+      <span>
+        Отменить операцию
+      </span>
+    </button>
+  </div>
+</div>
+`;

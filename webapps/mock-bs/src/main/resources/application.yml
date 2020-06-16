@@ -1,0 +1,52 @@
+project:
+  name: @project.name@
+  version: @project.version@
+
+# Spring Boot configuration
+spring:
+  profiles:
+    active: development
+
+logging:
+  pattern:
+    console: "%d %-5level %logger : %msg%n"
+  level:
+    ROOT: ERROR
+    ru.philit.ufs: DEBUG
+    org.springframework.web: ERROR
+    org.hibernate: ERROR
+    com.hazelcast: INFO
+
+# Server configuration
+server:
+  port: 8088
+  session.timeout: 30
+
+# JMS configuration
+jndi.esb:
+  connection-factory: jms/EsbConnectionFactory
+  queue:
+    in: jms/UfsEsbInQueue
+    out: jms/UfsEsbOutQueue
+
+# Hazelcast configuration
+hazelcast:
+  instance:
+    host:
+    port: 5702
+  members:
+    addresses:
+  group:
+    name: ufsmockbs
+    password: mock
+
+---
+
+spring:
+  profiles: development
+
+# JMS configuration
+jndi.esb:
+  queue:
+    in: jms/UfsEsbInQueue2
+    out: jms/UfsEsbOutQueue2

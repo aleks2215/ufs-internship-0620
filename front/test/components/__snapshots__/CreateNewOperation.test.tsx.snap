@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Компонент CreateNewOperation совпадает со своим снимком 1`] = `
+<div>
+  <form
+    class="ant-form ant-form-horizontal"
+  >
+    <div
+      class="ant-row"
+    >
+      <div
+        class="ant-col-18"
+      >
+        <div
+          class="ant-collapse panel"
+        >
+          <div
+            class="ant-collapse-item ant-collapse-item-active"
+          >
+            <div
+              aria-expanded="true"
+              class="ant-collapse-header"
+              role="tab"
+            >
+              <i
+                class="arrow"
+              />
+              Реквизиты операции
+            </div>
+            <div
+              class="ant-collapse-content ant-collapse-content-active"
+              role="tabpanel"
+            >
+              <div
+                class="ant-collapse-content-box"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          class="ant-row"
+        />
+      </div>
+      <div
+        class="ant-col-6"
+      />
+    </div>
+  </form>
+</div>
+`;
