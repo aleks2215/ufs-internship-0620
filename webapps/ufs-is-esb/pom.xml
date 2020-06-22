@@ -85,6 +85,19 @@
               <clearOutputDir>false</clearOutputDir>
             </configuration>
           </execution>
+          <execution>
+            <id>as_fs.xsd</id>
+            <goals>
+              <goal>xjc</goal>
+            </goals>
+            <configuration>
+              <packageName>ru.philit.ufs.model.entity.esb.as_fs</packageName>
+              <sources>
+                <source>src/main/resources/xsd/as_fs.xsd</source>
+              </sources>
+              <clearOutputDir>false</clearOutputDir>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
     </plugins>
