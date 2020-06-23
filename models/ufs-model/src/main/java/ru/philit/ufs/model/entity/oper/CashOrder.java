@@ -3,15 +3,11 @@ package ru.philit.ufs.model.entity.oper;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.datatype.XMLGregorianCalendar;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import ru.philit.ufs.model.entity.account.IdentityDocument;
-import ru.philit.ufs.model.entity.account.Representative;
 import ru.philit.ufs.model.entity.common.ExternalEntity;
 import ru.philit.ufs.model.entity.common.OperationTypeCode;
 import ru.philit.ufs.model.entity.user.Subbranch;
@@ -26,7 +22,7 @@ import ru.philit.ufs.model.entity.user.Subbranch;
 public class CashOrder extends ExternalEntity {
 
   private String responseCode;
-  protected OverLimitStatusType status;
+  protected OverLimitStatus status;
 
   private String responseMsg;
   private String cashOrderId;

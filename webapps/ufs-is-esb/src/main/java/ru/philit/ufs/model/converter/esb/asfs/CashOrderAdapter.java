@@ -7,12 +7,7 @@ import ru.philit.ufs.model.entity.common.OperationTypeCode;
 import ru.philit.ufs.model.entity.esb.as_fs.CashOrderStatusType;
 import ru.philit.ufs.model.entity.esb.as_fs.CashOrderType;
 import ru.philit.ufs.model.entity.esb.as_fs.IDDtype;
-import ru.philit.ufs.model.entity.esb.as_fs.LimitStatusType;
 import ru.philit.ufs.model.entity.esb.as_fs.OperTypeLabel;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvCheckOverLimitRq;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvCheckOverLimitRq.SrvCheckOverLimitRqMessage;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvCheckOverLimitRs;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvCheckOverLimitRs.SrvCheckOverLimitRsMessage;
 import ru.philit.ufs.model.entity.esb.as_fs.SrvCreateCashOrderRq;
 import ru.philit.ufs.model.entity.esb.as_fs.SrvCreateCashOrderRq.SrvCreateCashOrderRqMessage;
 import ru.philit.ufs.model.entity.esb.as_fs.SrvCreateCashOrderRq.SrvCreateCashOrderRqMessage.AdditionalInfo.CashSymbols;
@@ -29,7 +24,6 @@ import ru.philit.ufs.model.entity.oper.CashOrder;
 import ru.philit.ufs.model.entity.oper.CashOrderStatus;
 import ru.philit.ufs.model.entity.oper.CashOrderTypeModel;
 import ru.philit.ufs.model.entity.oper.CashSymbol;
-import ru.philit.ufs.model.entity.oper.OverLimitStatusType;
 
 /**
  * Преобразователь между сущностью CashOrder и соответствующим транспортным объектом.
@@ -50,11 +44,6 @@ public class CashOrderAdapter extends AsfsAdapter {
 
   private static CashOrderTypeModel cashOrderTypeModel(CashOrderType cashOrderType) {
     return (cashOrderType != null) ? CashOrderTypeModel.getByCode(cashOrderType.value()) : null;
-  }
-
-  private static OverLimitStatusType overLimitStatusType(LimitStatusType limitStatusType) {
-    return (limitStatusType != null) ? OverLimitStatusType.getByCode(limitStatusType.value())
-        : null;
   }
 
   private static OperTypeLabel operTypeLabel(OperationTypeCode operationTypeCode) {
@@ -175,20 +164,9 @@ public class CashOrderAdapter extends AsfsAdapter {
     cashOrder.setCashOrderTypeModel(cashOrderTypeModel(message.getCashOrderType()));
   }
 
-  private static void map(SrvCheckOverLimitRsMessage message, CashOrder cashOrder) {
-    cashOrder.setResponseCode(message.getResponseCode());
-    cashOrder.setStatus(overLimitStatusType(message.getStatus()));
-  }
-
   private static void map(CashOrder cashOrder, SrvUpdCashOrderRqMessage message) {
     message.setCashOrderId(cashOrder.getCashOrderId());
     message.setCashOrderStatus(cashOrderStatusType(cashOrder.getCashOrderStatus()));
-  }
-
-  private static void map(CashOrder cashOrder, SrvCheckOverLimitRqMessage message) {
-    message.setUserLogin(cashOrder.getUserLogin());
-    message.setTobeIncreased(cashOrder.isTobeIncreased());
-    message.setAmount(cashOrder.getAmount());
   }
 
   //******** Methods *******
@@ -216,17 +194,6 @@ public class CashOrderAdapter extends AsfsAdapter {
   }
 
   /**
-   * Возвращает объект проверки перелимита общего остатка.
-   */
-  public static SrvCheckOverLimitRq requestCheckOverLimit(CashOrder cashOrder) {
-    SrvCheckOverLimitRq request = new SrvCheckOverLimitRq();
-    request.setHeaderInfo(headerInfo());
-    request.setSrvCheckOverLimitRqMessage(new SrvCheckOverLimitRqMessage());
-    map(cashOrder, request.getSrvCheckOverLimitRqMessage());
-    return request;
-  }
-
-  /**
    * Преобразует транспортный объект обновления кассового ордера во внутреннюю сущность.
    */
   public static CashOrder convert(SrvUpdStCashOrderRs response) {
@@ -243,16 +210,6 @@ public class CashOrderAdapter extends AsfsAdapter {
     CashOrder cashOrder = new CashOrder();
     map(response.getHeaderInfo(), cashOrder);
     map(response.getSrvCreateCashOrderRsMessage(), cashOrder);
-    return cashOrder;
-  }
-
-  /**
-   * Преобразует транспортный объект проверки перелимита общего остатка во внутреннюю сущность.
-   */
-  public static CashOrder convert(SrvCheckOverLimitRs response) {
-    CashOrder cashOrder = new CashOrder();
-    map(response.getHeaderInfo(), cashOrder);
-    map(response.getSrvCheckOverLimitRsMessage(), cashOrder);
     return cashOrder;
   }
 
