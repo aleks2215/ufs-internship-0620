@@ -1,5 +1,7 @@
 package ru.philit.ufs.model.cache.hazelcast;
 
+import lombok.Getter;
+
 /**
  * Справочник констант для именований коллекций в кеше Hazelcast.
  */
@@ -47,6 +49,10 @@ public final class CollectionNames {
   public static final String REPRESENTATIVE_BY_CARD_MAP = "representativeByCardMap";
   public static final String OPERATOR_BY_USER_MAP = "operatorByUserMap";
   public static final String CASH_SYMBOLS_MAP = "cashSymbolsMap";
+
+  public static final String CASH_ORDER_RESPONSE_MAP = "cashOrderResponseMap";
+  public static final String CHECK_OVER_LIMIT_MAP = "checkOverLimitMap";
+  public static final String WORKPLACE_INFO_BY_UID_MAP = "workplaceInfoByUidMap";
 
   private CollectionNames() {
   }

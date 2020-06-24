@@ -6,8 +6,10 @@ import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.ACCOUNT_BY_CAR
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.ACCOUNT_BY_ID_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.ACCOUNT_RESIDUES_BY_ID_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.AUDITED_REQUESTS;
+import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.CASH_ORDER_RESPONSE_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.CASH_SYMBOLS_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.CHECK_FRAUD_BY_ACCOUNT_OPERATION_MAP;
+import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.CHECK_OVER_LIMIT_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.COMMISSION_BY_ACCOUNT_OPERATION_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.LEGAL_ENTITY_BY_ACCOUNT_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.LOGGED_EVENTS;
@@ -31,6 +33,7 @@ import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.RESPONSE_FLAG_
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.RESPONSE_QUEUE;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.SEIZURES_BY_ACCOUNT_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.USER_BY_SESSION_MAP;
+import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.WORKPLACE_INFO_BY_UID_MAP;
 
 import com.hazelcast.config.Config;
 import com.hazelcast.config.MapConfig;
@@ -64,8 +67,10 @@ import ru.philit.ufs.model.entity.common.ExternalEntityRequest;
 import ru.philit.ufs.model.entity.common.LocalKey;
 import ru.philit.ufs.model.entity.oper.CashDepositAnnouncement;
 import ru.philit.ufs.model.entity.oper.CashDepositAnnouncementsRequest;
+import ru.philit.ufs.model.entity.oper.CashOrder;
 import ru.philit.ufs.model.entity.oper.CashSymbol;
 import ru.philit.ufs.model.entity.oper.CashSymbolRequest;
+import ru.philit.ufs.model.entity.oper.CheckOverLimitRequest;
 import ru.philit.ufs.model.entity.oper.Operation;
 import ru.philit.ufs.model.entity.oper.OperationPackage;
 import ru.philit.ufs.model.entity.oper.OperationPackageRequest;
@@ -78,6 +83,7 @@ import ru.philit.ufs.model.entity.service.AuditEntity;
 import ru.philit.ufs.model.entity.service.LogEntity;
 import ru.philit.ufs.model.entity.user.Operator;
 import ru.philit.ufs.model.entity.user.User;
+import ru.philit.ufs.model.entity.user.Workplace;
 
 /**
  * Контейнер коллекций распределённого кеша.
@@ -173,6 +179,12 @@ public class HazelcastServer {
 
   @Getter private IMap<LocalKey<CashSymbolRequest>, List<CashSymbol>> cashSymbolsMap;
 
+  @Getter private IMap<LocalKey<CashOrder>, CashOrder> cashOrderResponseMap;
+
+  @Getter private IMap<LocalKey<CheckOverLimitRequest>, ExternalEntityContainer<Boolean>>
+      checkOverLimitMap;
+  @Getter private IMap<LocalKey<String>, Workplace> workplaceInfoByUidMap;
+
   /**
    * Конструктор бина.
    */
@@ -241,7 +253,8 @@ public class HazelcastServer {
         PAY_ORDERS_CARD_INDEX_1_BY_ACCOUNT_MAP, PAY_ORDERS_CARD_INDEX_2_BY_ACCOUNT_MAP,
         COMMISSION_BY_ACCOUNT_OPERATION_MAP, CHECK_FRAUD_BY_ACCOUNT_OPERATION_MAP,
         OVN_BY_UID_MAP, OVNS_MAP, ACCOUNT_20202_BY_WORK_PLACE_MAP, OPERATION_TYPES_BY_ROLES_MAP,
-        REPRESENTATIVE_MAP, REPRESENTATIVE_BY_CARD_MAP, OPERATOR_BY_USER_MAP, CASH_SYMBOLS_MAP}) {
+        REPRESENTATIVE_MAP, REPRESENTATIVE_BY_CARD_MAP, OPERATOR_BY_USER_MAP, CASH_SYMBOLS_MAP,
+        CHECK_OVER_LIMIT_MAP, WORKPLACE_INFO_BY_UID_MAP}) {
       MapConfig mapConfig = new MapConfig();
       mapConfig.setName(mapName);
       mapConfig.setTimeToLiveSeconds(3600);
@@ -288,6 +301,10 @@ public class HazelcastServer {
     representativeByCardMap = instance.getMap(REPRESENTATIVE_BY_CARD_MAP);
     operatorByUserMap = instance.getMap(OPERATOR_BY_USER_MAP);
     cashSymbolsMap = instance.getMap(CASH_SYMBOLS_MAP);
+
+    cashOrderResponseMap = instance.getMap(CASH_ORDER_RESPONSE_MAP);
+    checkOverLimitMap = instance.getMap(CHECK_OVER_LIMIT_MAP);
+    workplaceInfoByUidMap = instance.getMap(WORKPLACE_INFO_BY_UID_MAP);
 
     logger.info("Hazelcast server for {} is started", instance.getName());
   }
