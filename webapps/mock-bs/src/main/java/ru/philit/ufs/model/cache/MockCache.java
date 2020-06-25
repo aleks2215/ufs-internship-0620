@@ -3,6 +3,13 @@ package ru.philit.ufs.model.cache;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import ru.philit.ufs.model.entity.esb.as_fs.LimitStatusType;
+import ru.philit.ufs.model.entity.esb.as_fs.SrvCreateCashOrderRq;
+import ru.philit.ufs.model.entity.esb.as_fs.SrvCreateCashOrderRs;
+import ru.philit.ufs.model.entity.esb.as_fs.SrvCreateCashOrderRs.SrvCreateCashOrderRsMessage.KO1;
+import ru.philit.ufs.model.entity.esb.as_fs.SrvUpdStCashOrderRq;
+import ru.philit.ufs.model.entity.esb.as_fs.SrvUpdStCashOrderRs;
+import ru.philit.ufs.model.entity.esb.as_fs.SrvUpdStCashOrderRs.SrvUpdCashOrderRsMessage;
 import ru.philit.ufs.model.entity.esb.eks.PkgTaskStatusType;
 import ru.philit.ufs.model.entity.esb.eks.SrvGetTaskClOperPkgRs.SrvGetTaskClOperPkgRsMessage;
 import ru.philit.ufs.model.entity.oper.OperationPackageInfo;
@@ -33,5 +40,12 @@ public interface MockCache {
   Map<Long, List<SrvGetTaskClOperPkgRsMessage.PkgItem.ToCardDeposit.TaskItem>>
         searchTasksCardDeposit(Long packageId, PkgTaskStatusType taskStatus, Date fromDate,
         Date toDate, List<Long> taskIds);
+
+  void createCashOrder(SrvCreateCashOrderRq cashOrderRq, SrvCreateCashOrderRs cashOrderRs);
+
+  void updateStatusCashOrder(SrvUpdStCashOrderRq updStCashOrderRq,
+      SrvUpdStCashOrderRs updStCashOrderRs);
+
+  public LimitStatusType checkCashOrdersLimitByUser(String userLogin);
 
 }

@@ -1,6 +1,9 @@
 package ru.philit.ufs.model.cache.hazelcast;
 
+import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.REQUEST_MAP;
+
 import com.hazelcast.config.Config;
+import com.hazelcast.config.MapConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import ru.philit.ufs.config.property.HazelcastServerProperties;
 import ru.philit.ufs.model.entity.esb.eks.PkgTaskStatusType;
+import ru.philit.ufs.model.entity.oper.CashOrder;
 import ru.philit.ufs.model.entity.oper.OperationPackageInfo;
 
 /**
@@ -56,6 +60,10 @@ public class HazelcastMockServer {
    * Пакеты операций по ИНН клиента.
    */
   @Getter private IMap<String, Long> packageIdByInn;
+  /**
+   * Данные кассового ордера по id.
+   */
+  @Getter private IMap<String, CashOrder> cashOrderById;
 
   /**
    * Конструктор бина.
@@ -90,6 +98,13 @@ public class HazelcastMockServer {
     config.getNetworkConfig().getInterfaces().setEnabled(false);
     config.getGroupConfig().setName(groupName).setPassword(groupPassword);
 
+    for (String mapName : new String[]{"cashOrderById"}) {
+      MapConfig mapConfig = new MapConfig();
+      mapConfig.setName(mapName);
+      mapConfig.setTimeToLiveSeconds(86400);
+      config.addMapConfig(mapConfig);
+    }
+
     instance = Hazelcast.newHazelcastInstance(config);
 
     tasksCardDepositByPackageId = instance.getMap("tasksCardDepositByPackageId");
@@ -100,6 +115,7 @@ public class HazelcastMockServer {
     taskStatuses = instance.getMap("taskStatuses");
     packageById = instance.getMap("packageById");
     packageIdByInn = instance.getMap("packageIdByInn");
+    cashOrderById = instance.getMap("cashOrderById");
   }
 
   /**

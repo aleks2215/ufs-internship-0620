@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hazelcast.core.IMap;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -17,15 +18,31 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.xml.datatype.XMLGregorianCalendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import ru.philit.ufs.model.cache.MockCache;
+import ru.philit.ufs.model.entity.esb.as_fs.CashOrderStatusType;
+import ru.philit.ufs.model.entity.esb.as_fs.CashOrderType;
+import ru.philit.ufs.model.entity.esb.as_fs.LimitStatusType;
+import ru.philit.ufs.model.entity.esb.as_fs.SrvCreateCashOrderRq;
+import ru.philit.ufs.model.entity.esb.as_fs.SrvCreateCashOrderRs;
+import ru.philit.ufs.model.entity.esb.as_fs.SrvCreateCashOrderRs.SrvCreateCashOrderRsMessage;
+import ru.philit.ufs.model.entity.esb.as_fs.SrvCreateCashOrderRs.SrvCreateCashOrderRsMessage.KO1;
+import ru.philit.ufs.model.entity.esb.as_fs.SrvCreateCashOrderRs.SrvCreateCashOrderRsMessage.KO1.CashSymbols;
+import ru.philit.ufs.model.entity.esb.as_fs.SrvUpdStCashOrderRq;
+import ru.philit.ufs.model.entity.esb.as_fs.SrvUpdStCashOrderRs;
+import ru.philit.ufs.model.entity.esb.as_fs.SrvUpdStCashOrderRs.SrvUpdCashOrderRsMessage;
 import ru.philit.ufs.model.entity.esb.eks.PkgStatusType;
 import ru.philit.ufs.model.entity.esb.eks.PkgTaskStatusType;
 import ru.philit.ufs.model.entity.esb.eks.SrvGetTaskClOperPkgRs.SrvGetTaskClOperPkgRsMessage;
+import ru.philit.ufs.model.entity.oper.CashOrder;
+import ru.philit.ufs.model.entity.oper.CashOrderStatus;
+import ru.philit.ufs.model.entity.oper.CashOrderTypeModel;
+import ru.philit.ufs.model.entity.oper.CashSymbol;
 import ru.philit.ufs.model.entity.oper.OperationPackageInfo;
 
 /**
@@ -35,11 +52,13 @@ import ru.philit.ufs.model.entity.oper.OperationPackageInfo;
 public class HazelcastMockCacheImpl implements MockCache {
 
   private final Logger logger = LoggerFactory.getLogger(this.getClass());
+  private static final BigDecimal CASH_ORDER_LIMIT = new BigDecimal("1000000");
 
   private final HazelcastMockServer hazelcastServer;
   private final ObjectMapper jsonMapper;
 
   private Pattern createDatePattern = Pattern.compile("\"createdDttm\":(\\d+)");
+
 
   /**
    * Конструктор бина.
@@ -207,5 +226,92 @@ public class HazelcastMockCacheImpl implements MockCache {
     c.set(Calendar.SECOND, c.getActualMinimum(Calendar.SECOND));
     c.set(Calendar.MILLISECOND, c.getActualMinimum(Calendar.MILLISECOND));
     return c.getTime();
+  }
+
+  @Override
+  public synchronized void createCashOrder(SrvCreateCashOrderRq cashOrderRq,
+      SrvCreateCashOrderRs cashOrderRs) {
+    KO1 response = cashOrderRs.getSrvCreateCashOrderRsMessage().getKO1();
+    CashOrder cachedCashOrder = new CashOrder();
+    cachedCashOrder.setResponseCode(response.getResponseCode());
+    cachedCashOrder.setResponseMsg(response.getResponseMsg());
+    cachedCashOrder.setCashOrderId(response.getCashOrderId());
+    cachedCashOrder.setCashOrderINum(response.getCashOrderINum());
+    cachedCashOrder.setCashOrderStatus(cashOrderStatus(response.getCashOrderStatus()));
+    cachedCashOrder.setCashOrderTypeModel(cashOrderTypeModel(response.getCashOrderType()));
+    cachedCashOrder.setCreatedDttm(date(response.getCreatedDttm()));
+    cachedCashOrder.setOperationId(response.getOperationId());
+    cachedCashOrder.setRepFio(response.getRepFIO());
+    cachedCashOrder.setLegalEntityShortName(response.getLegalEntityShortName());
+    cachedCashOrder.setInn(response.getINN());
+    cachedCashOrder.setAmount(response.getAmount());
+    cachedCashOrder.setAccountId(response.getAccountId());
+    cachedCashOrder.setCashSymbols(new ArrayList<CashSymbol>());
+    if (response.getCashSymbols() != null) {
+      for (SrvCreateCashOrderRsMessage.KO1.CashSymbols.CashSymbolItem cashSymbolItem :
+          response.getCashSymbols().getCashSymbolItem()) {
+        CashSymbol cashSymbol = new CashSymbol();
+        cashSymbol.setCode(cashSymbolItem.getCashSymbol());
+        cashSymbol.setAmount(cashSymbolItem.getCashSymbolAmount());
+        cachedCashOrder.getCashSymbols().add(cashSymbol);
+      }
+    }
+    cachedCashOrder.setSenderBank(response.getSenderBank());
+    cachedCashOrder.setSenderBankBic(response.getSenderBankBIC());
+    cachedCashOrder.setRecipientBank(response.getRecipientBank());
+    cachedCashOrder.setRecipientBankBic(response.getRecipientBankBIC());
+    cachedCashOrder.setClientTypeFk(response.isClientTypeFK());
+    cachedCashOrder.setOrganisationNameFk(response.getFDestLEName());
+    cachedCashOrder.setOperatorPosition(response.getOperatorPosition());
+    cachedCashOrder.setUserFullName(response.getUserFullName());
+    cachedCashOrder.setUserPosition(response.getUserPosition());
+
+    cachedCashOrder.setUserLogin(cashOrderRq.getSrvCreateCashOrderRqMessage()
+        .getAdditionalInfo().getUserLogin());
+
+    hazelcastServer.getCashOrderById().put(response.getCashOrderId(), cachedCashOrder);
+  }
+
+  @Override
+  public synchronized void updateStatusCashOrder(SrvUpdStCashOrderRq updStCashOrderRq,
+      SrvUpdStCashOrderRs updStCashOrderRs) {
+    SrvUpdCashOrderRsMessage response = updStCashOrderRs.getSrvUpdCashOrderRsMessage();
+    CashOrder updatedCashOrder = hazelcastServer.getCashOrderById().get(response.getCashOrderId());
+    if (updatedCashOrder != null) {
+      updatedCashOrder.setResponseCode(response.getResponseCode());
+      updatedCashOrder.setResponseMsg(response.getResponseMsg());
+      updatedCashOrder.setCashOrderINum(response.getCashOrderINum());
+      updatedCashOrder.setCashOrderStatus(cashOrderStatus(response.getCashOrderStatus()));
+      updatedCashOrder.setCashOrderTypeModel(cashOrderTypeModel(response.getCashOrderType()));
+      hazelcastServer.getCashOrderById().put(response.getCashOrderId(), updatedCashOrder);
+    }
+  }
+
+  @Override
+  public LimitStatusType checkCashOrdersLimitByUser(String userLogin) {
+    BigDecimal amount = BigDecimal.ZERO;
+    for (CashOrder cashOrder : hazelcastServer.getCashOrderById().values()) {
+      if (cashOrder.getUserLogin().equals(userLogin)) {
+        amount = amount.add(cashOrder.getAmount());
+      }
+    }
+    if (CASH_ORDER_LIMIT.compareTo(amount) >= 0) {
+      return LimitStatusType.LIMIT_PASSED;
+    }
+
+    return LimitStatusType.LIMIT_ERROR;
+  }
+
+  private static CashOrderStatus cashOrderStatus(CashOrderStatusType cashOrderStatusType) {
+    return (cashOrderStatusType != null) ? CashOrderStatus.getByCode(cashOrderStatusType.value())
+        : null;
+  }
+
+  private static CashOrderTypeModel cashOrderTypeModel(CashOrderType cashOrderType) {
+    return (cashOrderType != null) ? CashOrderTypeModel.getByCode(cashOrderType.value()) : null;
+  }
+
+  private static Date date(XMLGregorianCalendar xmlCalendar) {
+    return (xmlCalendar != null) ? xmlCalendar.toGregorianCalendar().getTime() : null;
   }
 }
