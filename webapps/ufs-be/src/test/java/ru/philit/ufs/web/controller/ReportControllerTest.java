@@ -29,7 +29,9 @@ import ru.philit.ufs.model.entity.user.Operator;
 import ru.philit.ufs.model.entity.user.Subbranch;
 import ru.philit.ufs.model.entity.user.User;
 import ru.philit.ufs.web.dto.OperationJournalDto;
+import ru.philit.ufs.web.mapping.CashOrderJournalMapper;
 import ru.philit.ufs.web.mapping.OperationJournalMapper;
+import ru.philit.ufs.web.mapping.impl.CashOrderJournalMapperImpl;
 import ru.philit.ufs.web.mapping.impl.OperationJournalMapperImpl;
 import ru.philit.ufs.web.provider.ReportProvider;
 import ru.philit.ufs.web.provider.RepresentativeProvider;
@@ -44,6 +46,8 @@ public class ReportControllerTest extends RestControllerTest {
   private RepresentativeProvider representativeProvider;
   @Spy
   private OperationJournalMapper operationJournalMapper = new OperationJournalMapperImpl();
+  @Spy
+  private CashOrderJournalMapper cashOrderJournalMapper = new CashOrderJournalMapperImpl();
 
   /**
    * Set up test controller.
@@ -52,7 +56,7 @@ public class ReportControllerTest extends RestControllerTest {
   public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
     standaloneSetup(new ReportController(reportProvider, representativeProvider,
-        operationJournalMapper));
+        operationJournalMapper, cashOrderJournalMapper));
   }
 
   @Test

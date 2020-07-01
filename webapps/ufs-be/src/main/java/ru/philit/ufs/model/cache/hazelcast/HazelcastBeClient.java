@@ -8,6 +8,7 @@ import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.CASH_ORDER_RES
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.CASH_SYMBOLS_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.CHECK_OVER_LIMIT_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.COMMISSION_BY_ACCOUNT_OPERATION_MAP;
+import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.CONFIRMED_CASH_ORDERS;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.LEGAL_ENTITY_BY_ACCOUNT_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.LOGGED_EVENTS;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.OPERATION_BY_TASK_MAP;
@@ -154,6 +155,9 @@ public class HazelcastBeClient {
   @Getter
   private IMap<LocalKey<String>, Workplace> workplaceInfoByUidMap;
 
+  @Getter
+  private IList<CashOrder> confirmedCashOrders;
+
   @Autowired
   public HazelcastBeClient(
       HazelcastInstance hazelcastClient, HazelcastClientBeProperties properties
@@ -205,6 +209,8 @@ public class HazelcastBeClient {
     cashOrderResponseMap = instance.getMap(CASH_ORDER_RESPONSE_MAP);
     checkOverLimitMap = instance.getMap(CHECK_OVER_LIMIT_MAP);
     workplaceInfoByUidMap = instance.getMap(WORKPLACE_INFO_BY_UID_MAP);
+
+    confirmedCashOrders = instance.getList(CONFIRMED_CASH_ORDERS);
 
     logger.info("{} started", this.getClass().getSimpleName());
   }

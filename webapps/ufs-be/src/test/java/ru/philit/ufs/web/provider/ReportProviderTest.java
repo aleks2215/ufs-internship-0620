@@ -22,6 +22,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import ru.philit.ufs.model.cache.AnnouncementCache;
+import ru.philit.ufs.model.cache.AsfsCache;
 import ru.philit.ufs.model.cache.MockCache;
 import ru.philit.ufs.model.cache.OperationCache;
 import ru.philit.ufs.model.cache.UserCache;
@@ -53,13 +54,19 @@ public class ReportProviderTest {
   private UserCache userCache;
   @Spy
   private MockCache mockCache = new MockCacheImpl();
+  @Mock
+  private AsfsCache asfsCache;
 
   private ReportProvider provider;
 
+  /**
+   * Set up test controller.
+   */
   @Before
   public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
-    provider = new ReportProvider(operationCache, announcementCache, userCache, mockCache);
+    provider = new ReportProvider(
+        operationCache, announcementCache, userCache, mockCache, asfsCache);
   }
 
   @Test

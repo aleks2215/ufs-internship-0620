@@ -11,6 +11,7 @@ import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.CASH_SYMBOLS_M
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.CHECK_FRAUD_BY_ACCOUNT_OPERATION_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.CHECK_OVER_LIMIT_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.COMMISSION_BY_ACCOUNT_OPERATION_MAP;
+import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.CONFIRMED_CASH_ORDERS;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.LEGAL_ENTITY_BY_ACCOUNT_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.LOGGED_EVENTS;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.OPERATION_BY_TASK_MAP;
@@ -185,6 +186,8 @@ public class HazelcastServer {
       checkOverLimitMap;
   @Getter private IMap<LocalKey<String>, Workplace> workplaceInfoByUidMap;
 
+  @Getter private IList<CashOrder> confirmedCashOrders;
+
   /**
    * Конструктор бина.
    */
@@ -241,7 +244,7 @@ public class HazelcastServer {
       config.addMapConfig(mapConfig);
     }
 
-    for (String mapName : new String[]{AUDITED_REQUESTS, LOGGED_EVENTS}) {
+    for (String mapName : new String[]{AUDITED_REQUESTS, LOGGED_EVENTS, CONFIRMED_CASH_ORDERS}) {
       MapConfig mapConfig = new MapConfig();
       mapConfig.setName(mapName);
       config.addMapConfig(mapConfig);
@@ -305,6 +308,8 @@ public class HazelcastServer {
     cashOrderResponseMap = instance.getMap(CASH_ORDER_RESPONSE_MAP);
     checkOverLimitMap = instance.getMap(CHECK_OVER_LIMIT_MAP);
     workplaceInfoByUidMap = instance.getMap(WORKPLACE_INFO_BY_UID_MAP);
+
+    confirmedCashOrders = instance.getList(CONFIRMED_CASH_ORDERS);
 
     logger.info("Hazelcast server for {} is started", instance.getName());
   }

@@ -54,6 +54,8 @@ public final class CollectionNames {
   public static final String CHECK_OVER_LIMIT_MAP = "checkOverLimitMap";
   public static final String WORKPLACE_INFO_BY_UID_MAP = "workplaceInfoByUidMap";
 
+  public static final String CONFIRMED_CASH_ORDERS = "confirmedCashOrders";
+
   private CollectionNames() {
   }
 

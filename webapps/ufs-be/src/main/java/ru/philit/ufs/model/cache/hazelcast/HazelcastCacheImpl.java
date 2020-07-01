@@ -309,6 +309,16 @@ public class HazelcastCacheImpl
         clientInfo);
   }
 
+  @Override
+  public void addConfirmedCashOrder(CashOrder cashOrder) {
+    client.getConfirmedCashOrders().add(cashOrder);
+  }
+
+  @Override
+  public List<CashOrder> getConfirmedCashOrders() {
+    return client.getConfirmedCashOrders();
+  }
+
   private <K extends Serializable, V> V requestData(
       K key, IMap<LocalKey<K>, V> cacheMap, String type, ClientInfo clientInfo
   ) {

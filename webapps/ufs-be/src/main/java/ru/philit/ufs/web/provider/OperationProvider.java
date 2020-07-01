@@ -190,6 +190,7 @@ public class OperationProvider {
 
     CashOrder cashOrder = asfsCache.createCashOrder(MockCacheOrder.getCashOrder(), clientInfo);
     cashOrder = asfsCache.updateStatusCashOrder(cashOrder, clientInfo);
+    asfsCache.addConfirmedCashOrder(cashOrder);
 
     Operation operation = mockCache.createOperation(workplaceId, operationTypeCode);
     operation = mockCache.commitOperation(operation);

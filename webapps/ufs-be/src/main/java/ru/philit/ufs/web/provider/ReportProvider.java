@@ -9,10 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import ru.philit.ufs.model.cache.AnnouncementCache;
+import ru.philit.ufs.model.cache.AsfsCache;
 import ru.philit.ufs.model.cache.MockCache;
 import ru.philit.ufs.model.cache.OperationCache;
 import ru.philit.ufs.model.cache.UserCache;
 import ru.philit.ufs.model.entity.account.AccountOperationRequest;
+import ru.philit.ufs.model.entity.oper.CashOrder;
 import ru.philit.ufs.model.entity.oper.Operation;
 import ru.philit.ufs.model.entity.oper.OperationPackage;
 import ru.philit.ufs.model.entity.oper.OperationTask;
@@ -33,17 +35,19 @@ public class ReportProvider {
   private final AnnouncementCache announcementCache;
   private final UserCache userCache;
   private final MockCache mockCache;
+  private final AsfsCache asfsCache;
 
   /**
    * Конструктор бина.
    */
   @Autowired
   public ReportProvider(OperationCache operationCache, AnnouncementCache announcementCache,
-      UserCache userCache, MockCache mockCache) {
+      UserCache userCache, MockCache mockCache, AsfsCache asfsCache) {
     this.operationCache = operationCache;
     this.announcementCache = announcementCache;
     this.userCache = userCache;
     this.mockCache = mockCache;
+    this.asfsCache = asfsCache;
   }
 
   /**
@@ -134,5 +138,14 @@ public class ReportProvider {
         ? announcementCache.getCommission(
             new AccountOperationRequest(accountId, amount, operation.getTypeCode()), clientInfo)
         : null;
+  }
+
+  /**
+   * Получение подтвержденных кассовых ордерво.
+   *
+   * @return подтвержденные кассовые ордера
+   */
+  public List<CashOrder> getConfirmedCashOrders() {
+    return asfsCache.getConfirmedCashOrders();
   }
 }
