@@ -19,9 +19,11 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+import ru.philit.ufs.model.cache.AsfsCache;
 import ru.philit.ufs.model.cache.MockCache;
 import ru.philit.ufs.model.cache.UserCache;
 import ru.philit.ufs.model.cache.mock.MockCacheImpl;
+import ru.philit.ufs.model.entity.oper.CheckOverLimitRequest;
 import ru.philit.ufs.model.entity.user.ClientInfo;
 import ru.philit.ufs.model.entity.user.Operator;
 import ru.philit.ufs.model.entity.user.User;
@@ -52,7 +54,9 @@ public class UserProviderTest {
   }
 
   @Mock
-  private UserCache cache;
+  private UserCache userCache;
+  @Mock
+  private AsfsCache asfsCache;
   @Spy
   private MockCache mockCache = new MockCacheImpl();
 
@@ -61,18 +65,18 @@ public class UserProviderTest {
   @Before
   public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
-    provider = new UserProvider(cache, mockCache);
+    provider = new UserProvider(userCache, mockCache, asfsCache);
   }
 
   @Test
   public void testLoginUser() throws Exception {
     // when
-    doNothing().when(cache).addUser(anyString(), any(User.class));
+    doNothing().when(userCache).addUser(anyString(), any(User.class));
     provider.loginUser(LOGIN, PASSWORD);
 
     // verify
-    verify(cache, times(1)).addUser(anyString(), any(User.class));
-    verifyNoMoreInteractions(cache);
+    verify(userCache, times(1)).addUser(anyString(), any(User.class));
+    verifyNoMoreInteractions(userCache);
   }
 
   @Test(expected = InvalidDataException.class)
@@ -81,56 +85,56 @@ public class UserProviderTest {
     provider.loginUser(null, PASSWORD);
 
     // verify
-    verifyZeroInteractions(cache);
+    verifyZeroInteractions(userCache);
   }
 
   @Test
   public void testLogoutUser() throws Exception {
     // when
-    when(cache.removeUser(anyString())).thenReturn(true);
+    when(userCache.removeUser(anyString())).thenReturn(true);
     provider.logoutUser(SESSION_ID);
 
     // verify
-    verify(cache, times(1)).removeUser(anyString());
-    verifyNoMoreInteractions(cache);
+    verify(userCache, times(1)).removeUser(anyString());
+    verifyNoMoreInteractions(userCache);
   }
 
   @Test
   public void testGetUser() throws Exception {
     // when
-    when(cache.getUser(anyString())).thenReturn(new User());
+    when(userCache.getUser(anyString())).thenReturn(new User());
     provider.getUser(SESSION_ID);
 
     // verify
-    verify(cache, times(1)).getUser(anyString());
-    verifyNoMoreInteractions(cache);
+    verify(userCache, times(1)).getUser(anyString());
+    verifyNoMoreInteractions(userCache);
   }
 
   @Test
   public void testGetOperator() throws Exception {
     // when
-    when(cache.getUser(anyString())).thenReturn(new User());
-    when(cache.getOperator(anyString(), any(ClientInfo.class))).thenReturn(getOperator());
+    when(userCache.getUser(anyString())).thenReturn(new User());
+    when(userCache.getOperator(anyString(), any(ClientInfo.class))).thenReturn(getOperator());
     provider.getOperator(CLIENT_INFO);
 
     // verify
-    verify(cache, times(1)).getUser(anyString());
-    verify(cache, times(1)).getOperator(anyString(), any(ClientInfo.class));
-    verifyNoMoreInteractions(cache);
+    verify(userCache, times(1)).getUser(anyString());
+    verify(userCache, times(1)).getOperator(anyString(), any(ClientInfo.class));
+    verifyNoMoreInteractions(userCache);
   }
 
   @Test(expected = InvalidDataException.class)
   @UseDataProvider("cacheEmptyOperators")
   public void testGetOperator_NullFromCache(Operator cached) throws Exception {
     // when
-    when(cache.getUser(anyString())).thenReturn(new User());
-    when(cache.getOperator(anyString(), any(ClientInfo.class))).thenReturn(cached);
+    when(userCache.getUser(anyString())).thenReturn(new User());
+    when(userCache.getOperator(anyString(), any(ClientInfo.class))).thenReturn(cached);
     provider.getOperator(CLIENT_INFO);
 
     // verify
-    verify(cache, times(1)).getUser(anyString());
-    verify(cache, times(1)).getOperator(anyString(), any(ClientInfo.class));
-    verifyNoMoreInteractions(cache);
+    verify(userCache, times(1)).getUser(anyString());
+    verify(userCache, times(1)).getOperator(anyString(), any(ClientInfo.class));
+    verifyNoMoreInteractions(userCache);
   }
 
   @Test
@@ -143,23 +147,30 @@ public class UserProviderTest {
     workplace.setAmount(new BigDecimal("12345"));
 
     // when
-    when(cache.getUser(anyString())).thenReturn(new User());
-    when(cache.getOperator(anyString(), any(ClientInfo.class))).thenReturn(getOperator());
-    when(mockCache.getWorkplace(WORKPLACE_ID)).thenReturn(workplace);
+    when(userCache.getUser(anyString())).thenReturn(new User());
+    when(userCache.getOperator(anyString(), any(ClientInfo.class))).thenReturn(getOperator());
+    when(asfsCache.getWorkplace(anyString(), any(ClientInfo.class))).thenReturn(workplace);
+    when(asfsCache.checkOverLimit(any(CheckOverLimitRequest.class), any(ClientInfo.class)))
+        .thenReturn(AMOUNT.compareTo(workplace.getAmount()) >= 0);
     provider.getWorkplace(CLIENT_INFO);
 
     // verify
-    verify(cache, times(1)).getUser(anyString());
-    verify(cache, times(1)).getOperator(anyString(), any(ClientInfo.class));
-    verifyNoMoreInteractions(cache);
+    verify(userCache, times(2)).getUser(anyString());
+    verify(userCache, times(1)).getOperator(anyString(), any(ClientInfo.class));
+    verifyNoMoreInteractions(userCache);
+
+    verify(asfsCache, times(1)).getWorkplace(anyString(), any(ClientInfo.class));
+    verify(asfsCache, times(1))
+        .checkOverLimit(any(CheckOverLimitRequest.class), any(ClientInfo.class));
+    verifyNoMoreInteractions(asfsCache);
   }
 
   @Test(expected = InvalidDataException.class)
   public void testGetWorkplace_NullFromCache() throws Exception {
     // when
-    when(cache.getUser(anyString())).thenReturn(new User());
-    when(cache.getOperator(anyString(), any(ClientInfo.class))).thenReturn(getOperator());
-    when(mockCache.getWorkplace(WORKPLACE_ID)).thenReturn(null);
+    when(userCache.getUser(anyString())).thenReturn(new User());
+    when(userCache.getOperator(anyString(), any(ClientInfo.class))).thenReturn(getOperator());
+    when(asfsCache.getWorkplace(anyString(), any(ClientInfo.class))).thenReturn(null);
     provider.getWorkplace(CLIENT_INFO);
   }
 
@@ -171,9 +182,9 @@ public class UserProviderTest {
     workplace.setCashboxOnBoard(false);
 
     // when
-    when(cache.getUser(anyString())).thenReturn(new User());
-    when(cache.getOperator(anyString(), any(ClientInfo.class))).thenReturn(getOperator());
-    when(mockCache.getWorkplace(WORKPLACE_ID)).thenReturn(workplace);
+    when(userCache.getUser(anyString())).thenReturn(new User());
+    when(userCache.getOperator(anyString(), any(ClientInfo.class))).thenReturn(getOperator());
+    when(asfsCache.getWorkplace(anyString(), any(ClientInfo.class))).thenReturn(workplace);
     provider.getWorkplace(CLIENT_INFO);
   }
 
@@ -184,9 +195,9 @@ public class UserProviderTest {
     workplace.setType(WorkplaceType.CASHBOX);
 
     // when
-    when(cache.getUser(anyString())).thenReturn(new User());
-    when(cache.getOperator(anyString(), any(ClientInfo.class))).thenReturn(getOperator());
-    when(mockCache.getWorkplace(WORKPLACE_ID)).thenReturn(workplace);
+    when(userCache.getUser(anyString())).thenReturn(new User());
+    when(userCache.getOperator(anyString(), any(ClientInfo.class))).thenReturn(getOperator());
+    when(asfsCache.getWorkplace(anyString(), any(ClientInfo.class))).thenReturn(workplace);
     provider.getWorkplace(CLIENT_INFO);
   }
 
@@ -198,9 +209,9 @@ public class UserProviderTest {
     workplace.setCurrencyType(CURRENCY_TYPE);
 
     // when
-    when(cache.getUser(anyString())).thenReturn(new User());
-    when(cache.getOperator(anyString(), any(ClientInfo.class))).thenReturn(getOperator());
-    when(mockCache.getWorkplace(WORKPLACE_ID)).thenReturn(workplace);
+    when(userCache.getUser(anyString())).thenReturn(new User());
+    when(userCache.getOperator(anyString(), any(ClientInfo.class))).thenReturn(getOperator());
+    when(asfsCache.getWorkplace(anyString(), any(ClientInfo.class))).thenReturn(workplace);
     provider.getWorkplace(CLIENT_INFO);
   }
 
@@ -214,9 +225,11 @@ public class UserProviderTest {
     workplace.setAmount(new BigDecimal("9999999999"));
 
     // when
-    when(cache.getUser(anyString())).thenReturn(new User());
-    when(cache.getOperator(anyString(), any(ClientInfo.class))).thenReturn(getOperator());
-    when(mockCache.getWorkplace(WORKPLACE_ID)).thenReturn(workplace);
+    when(userCache.getUser(anyString())).thenReturn(new User());
+    when(userCache.getOperator(anyString(), any(ClientInfo.class))).thenReturn(getOperator());
+    when(asfsCache.getWorkplace(anyString(), any(ClientInfo.class))).thenReturn(workplace);
+    when(asfsCache.checkOverLimit(any(CheckOverLimitRequest.class), any(ClientInfo.class)))
+        .thenReturn(AMOUNT.compareTo(workplace.getAmount()) >= 0);
     provider.getWorkplace(CLIENT_INFO);
   }
 
@@ -227,32 +240,40 @@ public class UserProviderTest {
     workplace.setAmount(new BigDecimal("12345"));
 
     // when
-    when(cache.getUser(anyString())).thenReturn(new User());
-    when(cache.getOperator(anyString(), any(ClientInfo.class))).thenReturn(getOperator());
-    when(mockCache.getWorkplace(WORKPLACE_ID)).thenReturn(workplace);
+    when(userCache.getUser(anyString())).thenReturn(new User());
+    when(userCache.getOperator(anyString(), any(ClientInfo.class))).thenReturn(getOperator());
+    when(asfsCache.getWorkplace(anyString(), any(ClientInfo.class))).thenReturn(workplace);
+    when(asfsCache.checkOverLimit(any(CheckOverLimitRequest.class), any(ClientInfo.class)))
+        .thenReturn(AMOUNT.compareTo(workplace.getAmount()) >= 0);
     provider.checkWorkplaceIncreasedAmount(AMOUNT, CLIENT_INFO);
 
     // verify
-    verify(cache, times(1)).getUser(anyString());
-    verify(cache, times(1)).getOperator(anyString(), any(ClientInfo.class));
-    verifyNoMoreInteractions(cache);
+    verify(userCache, times(2)).getUser(anyString());
+    verify(userCache, times(1)).getOperator(anyString(), any(ClientInfo.class));
+
+    verifyNoMoreInteractions(userCache);
+
+    verify(asfsCache, times(1)).getWorkplace(anyString(), any(ClientInfo.class));
+    verify(asfsCache, times(1))
+        .checkOverLimit(any(CheckOverLimitRequest.class), any(ClientInfo.class));
+    verifyNoMoreInteractions(asfsCache);
   }
 
   @Test(expected = InvalidDataException.class)
   public void testCheckWorkplaceIncreasedAmount_NullFromCache() throws Exception {
     // when
-    when(cache.getUser(anyString())).thenReturn(new User());
-    when(cache.getOperator(anyString(), any(ClientInfo.class))).thenReturn(getOperator());
-    when(mockCache.getWorkplace(WORKPLACE_ID)).thenReturn(null);
+    when(userCache.getUser(anyString())).thenReturn(new User());
+    when(userCache.getOperator(anyString(), any(ClientInfo.class))).thenReturn(getOperator());
+    when(asfsCache.getWorkplace(anyString(), any(ClientInfo.class))).thenReturn(null);
     provider.checkWorkplaceIncreasedAmount(AMOUNT, CLIENT_INFO);
   }
 
   @Test(expected = InvalidDataException.class)
   public void testCheckWorkplaceIncreasedAmount_NullAmount() throws Exception {
     // when
-    when(cache.getUser(anyString())).thenReturn(new User());
-    when(cache.getOperator(anyString(), any(ClientInfo.class))).thenReturn(getOperator());
-    when(mockCache.getWorkplace(WORKPLACE_ID)).thenReturn(new Workplace());
+    when(userCache.getUser(anyString())).thenReturn(new User());
+    when(userCache.getOperator(anyString(), any(ClientInfo.class))).thenReturn(getOperator());
+    when(asfsCache.getWorkplace(anyString(), any(ClientInfo.class))).thenReturn(new Workplace());
     provider.checkWorkplaceIncreasedAmount(AMOUNT, CLIENT_INFO);
   }
 
@@ -263,9 +284,11 @@ public class UserProviderTest {
     workplace.setAmount(new BigDecimal("9999999999"));
 
     // when
-    when(cache.getUser(anyString())).thenReturn(new User());
-    when(cache.getOperator(anyString(), any(ClientInfo.class))).thenReturn(getOperator());
-    when(mockCache.getWorkplace(WORKPLACE_ID)).thenReturn(workplace);
+    when(userCache.getUser(anyString())).thenReturn(new User());
+    when(userCache.getOperator(anyString(), any(ClientInfo.class))).thenReturn(getOperator());
+    when(asfsCache.getWorkplace(anyString(), any(ClientInfo.class))).thenReturn(workplace);
+    when(asfsCache.checkOverLimit(any(CheckOverLimitRequest.class), any(ClientInfo.class)))
+        .thenReturn(AMOUNT.compareTo(workplace.getAmount()) >= 0);
     provider.checkWorkplaceIncreasedAmount(AMOUNT, CLIENT_INFO);
   }
 

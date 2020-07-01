@@ -5,9 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import ru.philit.ufs.model.cache.AsfsCache;
 import ru.philit.ufs.model.cache.MockCache;
 import ru.philit.ufs.model.cache.OperationCache;
+import ru.philit.ufs.model.cache.mock.MockCacheOrder;
 import ru.philit.ufs.model.entity.account.Representative;
+import ru.philit.ufs.model.entity.oper.CashOrder;
+import ru.philit.ufs.model.entity.oper.CashOrderStatus;
 import ru.philit.ufs.model.entity.oper.Operation;
 import ru.philit.ufs.model.entity.oper.OperationPackage;
 import ru.philit.ufs.model.entity.oper.OperationPackageRequest;
@@ -25,18 +29,20 @@ import ru.philit.ufs.web.exception.InvalidDataException;
 public class OperationProvider {
 
   private final RepresentativeProvider representativeProvider;
-  private final OperationCache cache;
+  private final OperationCache operationCache;
   private final MockCache mockCache;
+  private final AsfsCache asfsCache;
 
   /**
    * Конструктор бина.
    */
   @Autowired
   public OperationProvider(RepresentativeProvider representativeProvider, OperationCache cache,
-      MockCache mockCache) {
+      MockCache mockCache, AsfsCache asfsCache) {
     this.representativeProvider = representativeProvider;
-    this.cache = cache;
+    this.operationCache = cache;
     this.mockCache = mockCache;
+    this.asfsCache = asfsCache;
   }
 
   /**
@@ -83,7 +89,7 @@ public class OperationProvider {
     if ((opPackage == null) || (opPackage.getId() == null)) {
       opPackage = cache.createPackage(packageRequest, clientInfo);
     }*/
-    OperationPackage opPackage = cache.createPackage(packageRequest, clientInfo);
+    OperationPackage opPackage = operationCache.createPackage(packageRequest, clientInfo);
 
     depositTask.setStatus(taskStatus);
 
@@ -91,7 +97,7 @@ public class OperationProvider {
     addTasksPackage.setId(opPackage.getId());
     addTasksPackage.getToCardDeposits().add(depositTask);
 
-    return cache.addTasksInPackage(addTasksPackage, clientInfo);
+    return operationCache.addTasksInPackage(addTasksPackage, clientInfo);
   }
 
   /**
@@ -104,7 +110,7 @@ public class OperationProvider {
     OperationTasksRequest tasksRequest = new OperationTasksRequest();
     tasksRequest.setTaskStatusGlobal(OperationTaskStatus.FORWARDED);
 
-    List<OperationPackage> operationPackages = cache.getTasksInPackages(tasksRequest,
+    List<OperationPackage> operationPackages = operationCache.getTasksInPackages(tasksRequest,
         clientInfo);
 
     List<OperationTaskCardDeposit> resultList = new ArrayList<>();
@@ -164,7 +170,7 @@ public class OperationProvider {
     OperationTasksRequest getTasksRequest = new OperationTasksRequest();
     getTasksRequest.setPackageId(packageId);
 
-    OperationPackage opPackage = cache.getTasksInPackage(getTasksRequest, clientInfo);
+    OperationPackage opPackage = operationCache.getTasksInPackage(getTasksRequest, clientInfo);
     if (opPackage == null) {
       throw new InvalidDataException("Запрашиваемый пакет задач не найден");
     }
@@ -180,11 +186,16 @@ public class OperationProvider {
     updateTasksPackage.setId(packageId);
     updateTasksPackage.setToCardDeposits(depositTasks);
 
-    cache.updateTasksInPackage(updateTasksPackage, clientInfo);
+    operationCache.updateTasksInPackage(updateTasksPackage, clientInfo);
+
+    CashOrder cashOrder = asfsCache.createCashOrder(MockCacheOrder.getCashOrder(), clientInfo);
+    cashOrder = asfsCache.updateStatusCashOrder(cashOrder, clientInfo);
 
     Operation operation = mockCache.createOperation(workplaceId, operationTypeCode);
     operation = mockCache.commitOperation(operation);
-    cache.addOperation(taskId, operation);
+    operation.setCashOrderId(cashOrder);
+
+    operationCache.addOperation(taskId, operation);
 
     return operation;
   }
@@ -215,7 +226,7 @@ public class OperationProvider {
 
     OperationTasksRequest getTasksRequest = new OperationTasksRequest();
     getTasksRequest.setPackageId(packageId);
-    OperationPackage opPackage = cache.getTasksInPackage(getTasksRequest, clientInfo);
+    OperationPackage opPackage = operationCache.getTasksInPackage(getTasksRequest, clientInfo);
     if (opPackage == null) {
       throw new InvalidDataException("Запрашиваемый пакет задач не найден");
     }
@@ -230,12 +241,12 @@ public class OperationProvider {
     OperationPackage updateTasksPackage = new OperationPackage();
     updateTasksPackage.setId(packageId);
     updateTasksPackage.setToCardDeposits(depositTasks);
-    cache.updateTasksInPackage(updateTasksPackage, clientInfo);
+    operationCache.updateTasksInPackage(updateTasksPackage, clientInfo);
 
     Operation operation = mockCache.createOperation(workplaceId, operationTypeCode);
     operation = mockCache.cancelOperation(operation);
 
-    cache.addOperation(taskId, operation);
+    operationCache.addOperation(taskId, operation);
 
     return operation;
   }

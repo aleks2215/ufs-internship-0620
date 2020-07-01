@@ -19,6 +19,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+import ru.philit.ufs.model.cache.AsfsCache;
 import ru.philit.ufs.model.cache.MockCache;
 import ru.philit.ufs.model.cache.OperationCache;
 import ru.philit.ufs.model.cache.mock.MockCacheImpl;
@@ -55,7 +56,9 @@ public class OperationProviderTest {
   }
 
   @Mock
-  private OperationCache cache;
+  private OperationCache operationCache;
+  @Mock
+  private AsfsCache asfsCache;
   @Spy
   private MockCache mockCache = new MockCacheImpl();
   @Mock
@@ -66,7 +69,7 @@ public class OperationProviderTest {
   @Before
   public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
-    provider = new OperationProvider(representativeProvider, cache, mockCache);
+    provider = new OperationProvider(representativeProvider, operationCache, mockCache, asfsCache);
   }
 
   @Test
@@ -76,17 +79,19 @@ public class OperationProviderTest {
     opPackage.setId(PACKAGE_ID);
 
     // when
-    when(cache.createPackage(any(OperationPackageRequest.class), any(ClientInfo.class)))
+    when(operationCache.createPackage(any(OperationPackageRequest.class), any(ClientInfo.class)))
         .thenReturn(opPackage);
-    when(cache.addTasksInPackage(any(OperationPackage.class), any(ClientInfo.class)))
+    when(operationCache.addTasksInPackage(any(OperationPackage.class), any(ClientInfo.class)))
         .thenReturn(opPackage);
     provider.addActiveDepositTask(WORKPLACE_ID, TASK, CLIENT_INFO);
 
     // verify
-    verify(cache, times(1)).createPackage(any(OperationPackageRequest.class),
+    verify(operationCache, times(1))
+        .createPackage(any(OperationPackageRequest.class),
         any(ClientInfo.class));
-    verify(cache, times(1)).addTasksInPackage(any(OperationPackage.class), any(ClientInfo.class));
-    verifyNoMoreInteractions(cache);
+    verify(operationCache, times(1))
+        .addTasksInPackage(any(OperationPackage.class), any(ClientInfo.class));
+    verifyNoMoreInteractions(operationCache);
   }
 
   @Test(expected = InvalidDataException.class)
@@ -95,7 +100,7 @@ public class OperationProviderTest {
     provider.addActiveDepositTask(null, TASK, CLIENT_INFO);
 
     // verify
-    verifyZeroInteractions(cache);
+    verifyZeroInteractions(operationCache);
   }
 
   @Test(expected = InvalidDataException.class)
@@ -104,7 +109,7 @@ public class OperationProviderTest {
     provider.addActiveDepositTask(WORKPLACE_ID, null, CLIENT_INFO);
 
     // verify
-    verifyZeroInteractions(cache);
+    verifyZeroInteractions(operationCache);
   }
 
   @Test
@@ -115,22 +120,22 @@ public class OperationProviderTest {
     opPackage.setId(PACKAGE_ID);
 
     // when
-    when(cache.getPackage(any(OperationPackageRequest.class), any(ClientInfo.class)))
+    when(operationCache.getPackage(any(OperationPackageRequest.class), any(ClientInfo.class)))
         .thenReturn(cached);
-    when(cache.createPackage(any(OperationPackageRequest.class), any(ClientInfo.class)))
+    when(operationCache.createPackage(any(OperationPackageRequest.class), any(ClientInfo.class)))
         .thenReturn(opPackage);
-    when(cache.addTasksInPackage(any(OperationPackage.class), any(ClientInfo.class)))
+    when(operationCache.addTasksInPackage(any(OperationPackage.class), any(ClientInfo.class)))
         .thenReturn(opPackage);
     provider.addActiveDepositTask(WORKPLACE_ID, TASK, CLIENT_INFO);
 
     // verify
     /*verify(cache, times(1))
         .getPackage(any(OperationPackageRequest.class), any(ClientInfo.class));*/
-    verify(cache, times(1))
+    verify(operationCache, times(1))
         .createPackage(any(OperationPackageRequest.class), any(ClientInfo.class));
-    verify(cache, times(1))
+    verify(operationCache, times(1))
         .addTasksInPackage(any(OperationPackage.class), any(ClientInfo.class));
-    verifyNoMoreInteractions(cache);
+    verifyNoMoreInteractions(operationCache);
   }
 
   @Test
@@ -140,17 +145,19 @@ public class OperationProviderTest {
     opPackage.setId(PACKAGE_ID);
 
     // when
-    when(cache.createPackage(any(OperationPackageRequest.class), any(ClientInfo.class)))
+    when(operationCache.createPackage(any(OperationPackageRequest.class), any(ClientInfo.class)))
         .thenReturn(opPackage);
-    when(cache.addTasksInPackage(any(OperationPackage.class), any(ClientInfo.class)))
+    when(operationCache.addTasksInPackage(any(OperationPackage.class), any(ClientInfo.class)))
         .thenReturn(opPackage);
     provider.addForwardedDepositTask(WORKPLACE_ID, TASK, CLIENT_INFO);
 
     // verify
-    verify(cache, times(1)).createPackage(any(OperationPackageRequest.class),
+    verify(operationCache, times(1))
+        .createPackage(any(OperationPackageRequest.class),
         any(ClientInfo.class));
-    verify(cache, times(1)).addTasksInPackage(any(OperationPackage.class), any(ClientInfo.class));
-    verifyNoMoreInteractions(cache);
+    verify(operationCache, times(1))
+        .addTasksInPackage(any(OperationPackage.class), any(ClientInfo.class));
+    verifyNoMoreInteractions(operationCache);
   }
 
   @Test
@@ -164,22 +171,22 @@ public class OperationProviderTest {
     opPackage.setToCardDeposits(Arrays.asList(task1, task2));
 
     // when
-    when(cache.getTasksInPackage(any(OperationTasksRequest.class), any(ClientInfo.class)))
+    when(operationCache.getTasksInPackage(any(OperationTasksRequest.class), any(ClientInfo.class)))
         .thenReturn(opPackage);
-    when(cache.updateTasksInPackage(any(OperationPackage.class), any(ClientInfo.class)))
+    when(operationCache.updateTasksInPackage(any(OperationPackage.class), any(ClientInfo.class)))
         .thenReturn(opPackage);
-    doNothing().when(cache)
+    doNothing().when(operationCache)
         .addOperation(anyLong(), any(Operation.class));
     provider.confirmOperation(PACKAGE_ID, TASK_ID, WORKPLACE_ID, TYPE_CODE, CLIENT_INFO);
 
     // verify
-    verify(cache, times(1))
+    verify(operationCache, times(1))
         .getTasksInPackage(any(OperationTasksRequest.class), any(ClientInfo.class));
-    verify(cache, times(1))
+    verify(operationCache, times(1))
         .updateTasksInPackage(any(OperationPackage.class), any(ClientInfo.class));
-    verify(cache, times(1))
+    verify(operationCache, times(1))
         .addOperation(anyLong(), any(Operation.class));
-    verifyNoMoreInteractions(cache);
+    verifyNoMoreInteractions(operationCache);
   }
 
   @Test(expected = InvalidDataException.class)
@@ -188,7 +195,7 @@ public class OperationProviderTest {
     provider.confirmOperation(null, TASK_ID, WORKPLACE_ID, TYPE_CODE, CLIENT_INFO);
 
     // verify
-    verifyZeroInteractions(cache);
+    verifyZeroInteractions(operationCache);
   }
 
   @Test(expected = InvalidDataException.class)
@@ -197,7 +204,7 @@ public class OperationProviderTest {
     provider.confirmOperation(PACKAGE_ID, null, WORKPLACE_ID, TYPE_CODE, CLIENT_INFO);
 
     // verify
-    verifyZeroInteractions(cache);
+    verifyZeroInteractions(operationCache);
   }
 
   @Test(expected = InvalidDataException.class)
@@ -206,7 +213,7 @@ public class OperationProviderTest {
     provider.confirmOperation(PACKAGE_ID, TASK_ID, null, TYPE_CODE, CLIENT_INFO);
 
     // verify
-    verifyZeroInteractions(cache);
+    verifyZeroInteractions(operationCache);
   }
 
   @Test(expected = InvalidDataException.class)
@@ -215,20 +222,20 @@ public class OperationProviderTest {
     provider.confirmOperation(PACKAGE_ID, TASK_ID, WORKPLACE_ID, null, CLIENT_INFO);
 
     // verify
-    verifyZeroInteractions(cache);
+    verifyZeroInteractions(operationCache);
   }
 
   @Test(expected = InvalidDataException.class)
   public void testConfirmOperation_NullFromCache() throws Exception {
     // when
-    when(cache.getTasksInPackage(any(OperationTasksRequest.class), any(ClientInfo.class)))
+    when(operationCache.getTasksInPackage(any(OperationTasksRequest.class), any(ClientInfo.class)))
         .thenReturn(null);
     provider.confirmOperation(PACKAGE_ID, TASK_ID, WORKPLACE_ID, TYPE_CODE, CLIENT_INFO);
 
     // verify
-    verify(cache, times(1))
+    verify(operationCache, times(1))
         .getTasksInPackage(any(OperationTasksRequest.class), any(ClientInfo.class));
-    verifyNoMoreInteractions(cache);
+    verifyNoMoreInteractions(operationCache);
   }
 
   @Test
@@ -237,22 +244,22 @@ public class OperationProviderTest {
     OperationPackage opPackage = new OperationPackage();
 
     // when
-    when(cache.getTasksInPackage(any(OperationTasksRequest.class), any(ClientInfo.class)))
+    when(operationCache.getTasksInPackage(any(OperationTasksRequest.class), any(ClientInfo.class)))
         .thenReturn(opPackage);
-    when(cache.updateTasksInPackage(any(OperationPackage.class), any(ClientInfo.class)))
+    when(operationCache.updateTasksInPackage(any(OperationPackage.class), any(ClientInfo.class)))
         .thenReturn(opPackage);
-    doNothing().when(cache)
+    doNothing().when(operationCache)
         .addOperation(anyLong(), any(Operation.class));
     provider.confirmOperation(PACKAGE_ID, TASK_ID, WORKPLACE_ID, TYPE_CODE, CLIENT_INFO);
 
     // verify
-    verify(cache, times(1))
+    verify(operationCache, times(1))
         .getTasksInPackage(any(OperationTasksRequest.class), any(ClientInfo.class));
-    verify(cache, times(1))
+    verify(operationCache, times(1))
         .updateTasksInPackage(any(OperationPackage.class), any(ClientInfo.class));
-    verify(cache, times(1))
+    verify(operationCache, times(1))
         .addOperation(anyLong(), any(Operation.class));
-    verifyNoMoreInteractions(cache);
+    verifyNoMoreInteractions(operationCache);
   }
 
   @Test
@@ -261,20 +268,20 @@ public class OperationProviderTest {
     OperationPackage opPackage = new OperationPackage();
 
     // when
-    when(cache.getTasksInPackage(any(OperationTasksRequest.class), any(ClientInfo.class)))
+    when(operationCache.getTasksInPackage(any(OperationTasksRequest.class), any(ClientInfo.class)))
         .thenReturn(opPackage);
-    when(cache.updateTasksInPackage(any(OperationPackage.class), any(ClientInfo.class)))
+    when(operationCache.updateTasksInPackage(any(OperationPackage.class), any(ClientInfo.class)))
         .thenReturn(opPackage);
-    doNothing().when(cache).addOperation(anyLong(), any(Operation.class));
+    doNothing().when(operationCache).addOperation(anyLong(), any(Operation.class));
     provider.cancelOperation(PACKAGE_ID, TASK_ID, WORKPLACE_ID, TYPE_CODE, CLIENT_INFO);
 
     // verify
-    verify(cache, times(1)).getTasksInPackage(any(OperationTasksRequest.class),
+    verify(operationCache, times(1)).getTasksInPackage(any(OperationTasksRequest.class),
         any(ClientInfo.class));
-    verify(cache, times(1)).updateTasksInPackage(any(OperationPackage.class),
+    verify(operationCache, times(1)).updateTasksInPackage(any(OperationPackage.class),
         any(ClientInfo.class));
-    verify(cache, times(1)).addOperation(anyLong(), any(Operation.class));
-    verifyNoMoreInteractions(cache);
+    verify(operationCache, times(1)).addOperation(anyLong(), any(Operation.class));
+    verifyNoMoreInteractions(operationCache);
   }
 
   @Test(expected = InvalidDataException.class)
@@ -283,7 +290,7 @@ public class OperationProviderTest {
     provider.cancelOperation(null, TASK_ID, WORKPLACE_ID, TYPE_CODE, CLIENT_INFO);
 
     // verify
-    verifyZeroInteractions(cache);
+    verifyZeroInteractions(operationCache);
   }
 
   @Test(expected = InvalidDataException.class)
@@ -292,7 +299,7 @@ public class OperationProviderTest {
     provider.cancelOperation(PACKAGE_ID, null, WORKPLACE_ID, TYPE_CODE, CLIENT_INFO);
 
     // verify
-    verifyZeroInteractions(cache);
+    verifyZeroInteractions(operationCache);
   }
 
   @Test(expected = InvalidDataException.class)
@@ -301,7 +308,7 @@ public class OperationProviderTest {
     provider.cancelOperation(PACKAGE_ID, TASK_ID, null, TYPE_CODE, CLIENT_INFO);
 
     // verify
-    verifyZeroInteractions(cache);
+    verifyZeroInteractions(operationCache);
   }
 
   @Test(expected = InvalidDataException.class)
@@ -310,7 +317,7 @@ public class OperationProviderTest {
     provider.cancelOperation(PACKAGE_ID, TASK_ID, WORKPLACE_ID, null, CLIENT_INFO);
 
     // verify
-    verifyZeroInteractions(cache);
+    verifyZeroInteractions(operationCache);
   }
 
 }

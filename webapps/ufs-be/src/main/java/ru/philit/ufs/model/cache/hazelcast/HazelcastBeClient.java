@@ -4,7 +4,9 @@ import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.ACCOUNT_20202_
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.ACCOUNT_BY_CARD_NUMBER_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.ACCOUNT_RESIDUES_BY_ID_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.AUDITED_REQUESTS;
+import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.CASH_ORDER_RESPONSE_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.CASH_SYMBOLS_MAP;
+import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.CHECK_OVER_LIMIT_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.COMMISSION_BY_ACCOUNT_OPERATION_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.LEGAL_ENTITY_BY_ACCOUNT_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.LOGGED_EVENTS;
@@ -25,6 +27,7 @@ import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.REQUEST_QUEUE;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.RESPONSE_FLAG_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.SEIZURES_BY_ACCOUNT_MAP;
 import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.USER_BY_SESSION_MAP;
+import static ru.philit.ufs.model.cache.hazelcast.CollectionNames.WORKPLACE_INFO_BY_UID_MAP;
 
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.core.HazelcastInstance;
@@ -54,8 +57,10 @@ import ru.philit.ufs.model.entity.common.ExternalEntityRequest;
 import ru.philit.ufs.model.entity.common.LocalKey;
 import ru.philit.ufs.model.entity.oper.CashDepositAnnouncement;
 import ru.philit.ufs.model.entity.oper.CashDepositAnnouncementsRequest;
+import ru.philit.ufs.model.entity.oper.CashOrder;
 import ru.philit.ufs.model.entity.oper.CashSymbol;
 import ru.philit.ufs.model.entity.oper.CashSymbolRequest;
+import ru.philit.ufs.model.entity.oper.CheckOverLimitRequest;
 import ru.philit.ufs.model.entity.oper.Operation;
 import ru.philit.ufs.model.entity.oper.OperationPackage;
 import ru.philit.ufs.model.entity.oper.OperationPackageRequest;
@@ -68,6 +73,7 @@ import ru.philit.ufs.model.entity.service.AuditEntity;
 import ru.philit.ufs.model.entity.service.LogEntity;
 import ru.philit.ufs.model.entity.user.Operator;
 import ru.philit.ufs.model.entity.user.User;
+import ru.philit.ufs.model.entity.user.Workplace;
 
 /**
  * Клиент доступа к кешу Hazelcast.
@@ -139,6 +145,15 @@ public class HazelcastBeClient {
   @Getter
   private IMap<LocalKey<String>, Operator> operatorByUserMap;
 
+  @Getter
+  private IMap<LocalKey<CashOrder>, CashOrder> cashOrderResponseMap;
+
+  @Getter
+  private IMap<LocalKey<CheckOverLimitRequest>, ExternalEntityContainer<Boolean>>
+      checkOverLimitMap;
+  @Getter
+  private IMap<LocalKey<String>, Workplace> workplaceInfoByUidMap;
+
   @Autowired
   public HazelcastBeClient(
       HazelcastInstance hazelcastClient, HazelcastClientBeProperties properties
@@ -186,6 +201,10 @@ public class HazelcastBeClient {
     representativeByCardNumberMap = instance.getMap(REPRESENTATIVE_BY_CARD_MAP);
 
     operatorByUserMap = instance.getMap(OPERATOR_BY_USER_MAP);
+
+    cashOrderResponseMap = instance.getMap(CASH_ORDER_RESPONSE_MAP);
+    checkOverLimitMap = instance.getMap(CHECK_OVER_LIMIT_MAP);
+    workplaceInfoByUidMap = instance.getMap(WORKPLACE_INFO_BY_UID_MAP);
 
     logger.info("{} started", this.getClass().getSimpleName());
   }

@@ -12,7 +12,6 @@ import ru.philit.ufs.model.cache.MockCache;
 import ru.philit.ufs.model.entity.account.Card;
 import ru.philit.ufs.model.entity.oper.Operation;
 import ru.philit.ufs.model.entity.user.User;
-import ru.philit.ufs.model.entity.user.Workplace;
 
 @RunWith(DataProviderRunner.class)
 public class MockCacheImplTest {
@@ -69,18 +68,6 @@ public class MockCacheImplTest {
 
     // then
     assertNotNull(card);
-  }
-
-  @Test
-  public void testGetWorkplaceLimits() throws Exception {
-    // given
-    String workplaceId = "AC11921E8E1247009ED17924B8CD9E72";
-
-    // when
-    Workplace workplace = cache.getWorkplace(workplaceId);
-
-    // then
-    assertNotNull(workplace);
   }
 
   @Test

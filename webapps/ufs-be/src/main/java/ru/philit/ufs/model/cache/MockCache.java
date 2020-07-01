@@ -15,10 +15,6 @@ public interface MockCache {
 
   Card getCreditCard();
 
-  Workplace getWorkplace(String workplaceId);
-
-  boolean checkOverLimit(BigDecimal amount);
-
   Operation createOperation(String workplaceId, String operationTypeCode);
 
   Operation commitOperation(Operation operation);

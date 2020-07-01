@@ -8,18 +8,22 @@ import static ru.philit.ufs.model.entity.request.RequestType.ADD_OPER_TASK;
 import static ru.philit.ufs.model.entity.request.RequestType.CARD_INDEX_ELEMENTS_BY_ACCOUNT;
 import static ru.philit.ufs.model.entity.request.RequestType.CASH_SYMBOL;
 import static ru.philit.ufs.model.entity.request.RequestType.CHECK_OPER_PACKAGE;
+import static ru.philit.ufs.model.entity.request.RequestType.CHECK_OVER_LIMIT;
 import static ru.philit.ufs.model.entity.request.RequestType.COUNT_COMMISSION;
+import static ru.philit.ufs.model.entity.request.RequestType.CREATE_CASH_ORDER;
 import static ru.philit.ufs.model.entity.request.RequestType.CREATE_OPER_PACKAGE;
 import static ru.philit.ufs.model.entity.request.RequestType.GET_OPER_TASKS;
 import static ru.philit.ufs.model.entity.request.RequestType.GET_OVN;
 import static ru.philit.ufs.model.entity.request.RequestType.GET_OVN_LIST;
 import static ru.philit.ufs.model.entity.request.RequestType.GET_REPRESENTATIVE_BY_CARD;
+import static ru.philit.ufs.model.entity.request.RequestType.GET_WORKPLACE_INFO;
 import static ru.philit.ufs.model.entity.request.RequestType.LEGAL_ENTITY_BY_ACCOUNT;
 import static ru.philit.ufs.model.entity.request.RequestType.OPERATOR_BY_USER;
 import static ru.philit.ufs.model.entity.request.RequestType.OPER_TYPES_BY_ROLE;
 import static ru.philit.ufs.model.entity.request.RequestType.SEARCH_REPRESENTATIVE;
 import static ru.philit.ufs.model.entity.request.RequestType.SEIZURES_BY_ACCOUNT;
 import static ru.philit.ufs.model.entity.request.RequestType.UPDATE_OPER_TASK;
+import static ru.philit.ufs.model.entity.request.RequestType.UPDATE_STATUS_CASH_ORDER;
 
 import com.google.common.collect.Iterables;
 import com.hazelcast.core.IMap;
@@ -30,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.philit.ufs.model.cache.AccountCache;
 import ru.philit.ufs.model.cache.AnnouncementCache;
+import ru.philit.ufs.model.cache.AsfsCache;
 import ru.philit.ufs.model.cache.OperationCache;
 import ru.philit.ufs.model.cache.OperationTypeCache;
 import ru.philit.ufs.model.cache.RepresentativeCache;
@@ -45,8 +50,10 @@ import ru.philit.ufs.model.entity.common.ExternalEntityContainer;
 import ru.philit.ufs.model.entity.common.LocalKey;
 import ru.philit.ufs.model.entity.oper.CashDepositAnnouncement;
 import ru.philit.ufs.model.entity.oper.CashDepositAnnouncementsRequest;
+import ru.philit.ufs.model.entity.oper.CashOrder;
 import ru.philit.ufs.model.entity.oper.CashSymbol;
 import ru.philit.ufs.model.entity.oper.CashSymbolRequest;
+import ru.philit.ufs.model.entity.oper.CheckOverLimitRequest;
 import ru.philit.ufs.model.entity.oper.Operation;
 import ru.philit.ufs.model.entity.oper.OperationPackage;
 import ru.philit.ufs.model.entity.oper.OperationPackageRequest;
@@ -58,6 +65,7 @@ import ru.philit.ufs.model.entity.oper.PaymentOrderCardIndex2;
 import ru.philit.ufs.model.entity.user.ClientInfo;
 import ru.philit.ufs.model.entity.user.Operator;
 import ru.philit.ufs.model.entity.user.User;
+import ru.philit.ufs.model.entity.user.Workplace;
 import ru.philit.ufs.service.AuditService;
 import ru.philit.ufs.web.exception.UserNotFoundException;
 
@@ -67,7 +75,7 @@ import ru.philit.ufs.web.exception.UserNotFoundException;
 @Service
 public class HazelcastCacheImpl
     implements AccountCache, AnnouncementCache, OperationCache, OperationTypeCache,
-    RepresentativeCache, UserCache {
+    RepresentativeCache, UserCache, AsfsCache {
 
   private final HazelcastBeClient client;
   private final AuditService auditService;
@@ -274,6 +282,31 @@ public class HazelcastCacheImpl
     return requestData(
         request, client.getRepresentativeMap(), SEARCH_REPRESENTATIVE, clientInfo
     );
+  }
+
+  @Override
+  public Workplace getWorkplace(String workplaceId, ClientInfo clientInfo) {
+    return requestData(
+        workplaceId, client.getWorkplaceInfoByUidMap(), GET_WORKPLACE_INFO, clientInfo);
+  }
+
+  @Override
+  public boolean checkOverLimit(CheckOverLimitRequest request, ClientInfo clientInfo) {
+    ExternalEntityContainer<Boolean> container = requestData(
+        request, client.getCheckOverLimitMap(), CHECK_OVER_LIMIT, clientInfo
+    );
+    return container.getData();
+  }
+
+  @Override
+  public CashOrder createCashOrder(CashOrder request, ClientInfo clientInfo) {
+    return requestData(request, client.getCashOrderResponseMap(), CREATE_CASH_ORDER, clientInfo);
+  }
+
+  @Override
+  public CashOrder updateStatusCashOrder(CashOrder request, ClientInfo clientInfo) {
+    return requestData(request, client.getCashOrderResponseMap(), UPDATE_STATUS_CASH_ORDER,
+        clientInfo);
   }
 
   private <K extends Serializable, V> V requestData(

@@ -20,6 +20,7 @@ public class Operation extends ExternalEntity {
   private String id;
   private OperationStatus status;
   private OperationTypeCode typeCode;
+  private CashOrder cashOrderId;
   private String workplaceId;
   private Date createdDate;
   private Date committedDate;

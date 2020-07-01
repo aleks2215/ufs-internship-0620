@@ -5,8 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+import ru.philit.ufs.model.cache.AsfsCache;
 import ru.philit.ufs.model.cache.MockCache;
 import ru.philit.ufs.model.cache.UserCache;
+import ru.philit.ufs.model.entity.oper.CheckOverLimitRequest;
 import ru.philit.ufs.model.entity.user.ClientInfo;
 import ru.philit.ufs.model.entity.user.Operator;
 import ru.philit.ufs.model.entity.user.SessionUser;
@@ -22,13 +24,18 @@ import ru.philit.ufs.web.exception.InvalidDataException;
 @Service
 public class UserProvider {
 
-  private final UserCache cache;
+  private final UserCache userCache;
   private final MockCache mockCache;
+  private final AsfsCache asfsCache;
 
+  /**
+   * Конструктор.
+   */
   @Autowired
-  public UserProvider(UserCache cache, MockCache mockCache) {
-    this.cache = cache;
+  public UserProvider(UserCache cache, MockCache mockCache, AsfsCache asfsCache) {
+    this.userCache = cache;
     this.mockCache = mockCache;
+    this.asfsCache = asfsCache;
   }
 
   /**
@@ -45,7 +52,7 @@ public class UserProvider {
     }
 
     String sessionId = UuidUtils.getRandomUuid();
-    cache.addUser(sessionId, user);
+    userCache.addUser(sessionId, user);
 
     SessionUser sessionUser = new SessionUser(user);
     sessionUser.setSessionId(sessionId);
@@ -59,7 +66,7 @@ public class UserProvider {
    * @return результат завершения сеанса
    */
   public boolean logoutUser(String sessionId) {
-    return cache.removeUser(sessionId);
+    return userCache.removeUser(sessionId);
   }
 
   /**
@@ -69,7 +76,7 @@ public class UserProvider {
    * @return информация о пользователе
    */
   public User getUser(String sessionId) {
-    return cache.getUser(sessionId);
+    return userCache.getUser(sessionId);
   }
 
   /**
@@ -80,7 +87,7 @@ public class UserProvider {
    */
   public Operator getOperator(ClientInfo clientInfo) {
     User user = getUser(clientInfo.getSessionId());
-    Operator operator = cache.getOperator(user.getLogin(), clientInfo);
+    Operator operator = userCache.getOperator(user.getLogin(), clientInfo);
     if (operator == null) {
       throw new InvalidDataException("Запрашиваемый оператор не найден в системе");
     }
@@ -98,7 +105,7 @@ public class UserProvider {
    */
   public Workplace getWorkplace(ClientInfo clientInfo) {
     Operator operator = getOperator(clientInfo);
-    Workplace workplace = mockCache.getWorkplace(operator.getWorkplaceId());
+    Workplace workplace = asfsCache.getWorkplace(operator.getWorkplaceId(), clientInfo);
     if (workplace == null) {
       throw new InvalidDataException("Запрашиваемое рабочее место не найдено в системе");
     }
@@ -112,7 +119,14 @@ public class UserProvider {
     if (workplace.getAmount() == null) {
       throw new InvalidDataException("Отсутствует общий остаток по кассе");
     }
-    if (!mockCache.checkOverLimit(workplace.getAmount())) {
+
+    CheckOverLimitRequest checkOverLimitRequest = new CheckOverLimitRequest();
+    checkOverLimitRequest.setTobeIncreased(false);
+    checkOverLimitRequest.setAmount(workplace.getAmount());
+    User user = getUser(clientInfo.getSessionId());
+    checkOverLimitRequest.setUserLogin(user.getLogin());
+
+    if (!asfsCache.checkOverLimit(checkOverLimitRequest, clientInfo)) {
       throw new InvalidDataException("Превышен лимит общего остатка по кассе");
     }
     return workplace;
@@ -126,14 +140,21 @@ public class UserProvider {
    */
   public void checkWorkplaceIncreasedAmount(BigDecimal amount, ClientInfo clientInfo) {
     Operator operator = getOperator(clientInfo);
-    Workplace workplace = mockCache.getWorkplace(operator.getWorkplaceId());
+    Workplace workplace = asfsCache.getWorkplace(operator.getWorkplaceId(), clientInfo);
     if (workplace == null) {
       throw new InvalidDataException("Запрашиваемое рабочее место не найдено в системе");
     }
     if (workplace.getAmount() == null) {
       throw new InvalidDataException("Отсутствует общий остаток по кассе");
     }
-    if (!mockCache.checkOverLimit(amount.add(workplace.getAmount()))) {
+
+    CheckOverLimitRequest checkOverLimitRequest = new CheckOverLimitRequest();
+    checkOverLimitRequest.setTobeIncreased(true);
+    checkOverLimitRequest.setAmount(amount.add(workplace.getAmount()));
+    User user = getUser(clientInfo.getSessionId());
+    checkOverLimitRequest.setUserLogin(user.getLogin());
+
+    if (!asfsCache.checkOverLimit(checkOverLimitRequest, clientInfo)) {
       throw new InvalidDataException("Превышен лимит общего остатка по кассе");
     }
   }
