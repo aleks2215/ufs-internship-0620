@@ -144,11 +144,13 @@ public class CashOrderAdapter extends AsfsAdapter {
       additionalInfo.setCashSymbols(cashSymbols);
     }
 
-    additionalInfo.setSubbranchCode(cashOrder.getSubbranch().getSubbranchCode());
-    additionalInfo.setVSPCode(cashOrder.getSubbranch().getVspCode());
-    additionalInfo.setOSBCode(cashOrder.getSubbranch().getOsbCode());
-    additionalInfo.setGOSBCode(cashOrder.getSubbranch().getGosbCode());
-    additionalInfo.setTBCode(cashOrder.getSubbranch().getTbCode());
+    if (cashOrder.getSubbranch() != null) {
+      additionalInfo.setSubbranchCode(cashOrder.getSubbranch().getSubbranchCode());
+      additionalInfo.setVSPCode(cashOrder.getSubbranch().getVspCode());
+      additionalInfo.setOSBCode(cashOrder.getSubbranch().getOsbCode());
+      additionalInfo.setGOSBCode(cashOrder.getSubbranch().getGosbCode());
+      additionalInfo.setTBCode(cashOrder.getSubbranch().getTbCode());
+    }
 
     additionalInfo.setComment(cashOrder.getComment());
     additionalInfo.setAccount20202Num(cashOrder.getAccount20202Num());
