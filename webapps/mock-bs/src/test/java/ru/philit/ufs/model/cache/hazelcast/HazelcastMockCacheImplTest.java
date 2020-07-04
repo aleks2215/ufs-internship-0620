@@ -3,6 +3,7 @@ package ru.philit.ufs.model.cache.hazelcast;
 import static org.mockito.Mockito.when;
 
 import com.hazelcast.core.IMap;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import org.junit.Assert;
@@ -10,14 +11,24 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import ru.philit.ufs.model.entity.esb.as_fs.CashOrderStatusType;
+import ru.philit.ufs.model.entity.esb.as_fs.LimitStatusType;
+import ru.philit.ufs.model.entity.esb.as_fs.SrvCreateCashOrderRs;
+import ru.philit.ufs.model.entity.esb.as_fs.SrvCreateCashOrderRs.SrvCreateCashOrderRsMessage;
+import ru.philit.ufs.model.entity.esb.as_fs.SrvCreateCashOrderRs.SrvCreateCashOrderRsMessage.KO1;
+import ru.philit.ufs.model.entity.esb.as_fs.SrvUpdStCashOrderRs;
+import ru.philit.ufs.model.entity.esb.as_fs.SrvUpdStCashOrderRs.SrvUpdCashOrderRsMessage;
 import ru.philit.ufs.model.entity.esb.eks.PkgTaskStatusType;
 import ru.philit.ufs.model.entity.esb.eks.SrvGetTaskClOperPkgRs.SrvGetTaskClOperPkgRsMessage;
+import ru.philit.ufs.model.entity.oper.CashOrder;
+import ru.philit.ufs.model.entity.oper.CashOrderStatus;
 import ru.philit.ufs.model.entity.oper.OperationPackageInfo;
 
 public class HazelcastMockCacheImplTest {
 
   private static final String CTRL_TASK_ELEMENT = "\"pkgTaskId\":10";
   private static final String INN = "77700044422232";
+  private static final String USER_LOGIN = "aleks-login";
 
   static class TestTaskBody {
 
@@ -41,6 +52,11 @@ public class HazelcastMockCacheImplTest {
   private IMap<Long, PkgTaskStatusType> taskStatuses = new MockIMap<>();
   private IMap<Long, OperationPackageInfo> packageById = new MockIMap<>();
   private IMap<String, Long> packageIdByInn = new MockIMap<>();
+  private IMap<String, CashOrder> cashOrderById = new MockIMap<>();
+
+  private SrvCreateCashOrderRs createCashOrderRs1;
+  private SrvCreateCashOrderRs createCashOrderRs2;
+  private SrvUpdStCashOrderRs updStCashOrderRs;
 
   /**
    * Set up test data.
@@ -62,6 +78,31 @@ public class HazelcastMockCacheImplTest {
     when(hazelcastMockServer.getTaskStatuses()).thenReturn(taskStatuses);
     when(hazelcastMockServer.getPackageById()).thenReturn(packageById);
     when(hazelcastMockServer.getPackageIdByInn()).thenReturn(packageIdByInn);
+    when(hazelcastMockServer.getCashOrderById()).thenReturn(cashOrderById);
+
+    createCashOrderRs1 = new SrvCreateCashOrderRs();
+    createCashOrderRs1.setSrvCreateCashOrderRsMessage(new SrvCreateCashOrderRsMessage());
+    createCashOrderRs1.getSrvCreateCashOrderRsMessage().setKO1(new KO1());
+    createCashOrderRs1.getSrvCreateCashOrderRsMessage().getKO1().setCashOrderId("101");
+    createCashOrderRs1.getSrvCreateCashOrderRsMessage().getKO1().setCashOrderStatus(
+        CashOrderStatusType.CREATED);
+    createCashOrderRs1.getSrvCreateCashOrderRsMessage().getKO1()
+        .setAmount(new BigDecimal(50000));
+
+    createCashOrderRs2 = new SrvCreateCashOrderRs();
+    createCashOrderRs2.setSrvCreateCashOrderRsMessage(new SrvCreateCashOrderRsMessage());
+    createCashOrderRs2.getSrvCreateCashOrderRsMessage().setKO1(new KO1());
+    createCashOrderRs2.getSrvCreateCashOrderRsMessage().getKO1().setCashOrderId("102");
+    createCashOrderRs2.getSrvCreateCashOrderRsMessage().getKO1().setCashOrderStatus(
+        CashOrderStatusType.CREATED);
+    createCashOrderRs2.getSrvCreateCashOrderRsMessage().getKO1()
+        .setAmount(new BigDecimal(5000000));
+
+    updStCashOrderRs = new SrvUpdStCashOrderRs();
+    updStCashOrderRs.setSrvUpdCashOrderRsMessage(new SrvUpdCashOrderRsMessage());
+    updStCashOrderRs.getSrvUpdCashOrderRsMessage().setCashOrderId("101");
+    updStCashOrderRs.getSrvUpdCashOrderRsMessage().setCashOrderStatus(
+        CashOrderStatusType.COMMITTED);
   }
 
   @Test
@@ -146,4 +187,49 @@ public class HazelcastMockCacheImplTest {
     Assert.assertNotNull(resultMap);
     Assert.assertTrue(resultMap.isEmpty());
   }
+
+  @Test
+  public void testCreateCashOrder() {
+    // when
+    mockCache.createCashOrder(createCashOrderRs1, USER_LOGIN);
+    // then
+    Assert.assertNotNull(cashOrderById);
+    Assert.assertNotNull(cashOrderById.get("101"));
+    Assert.assertEquals(cashOrderById.get("101").getUserLogin(), USER_LOGIN);
+  }
+
+  @Test
+  public void testUpdateStatusCashOrder() {
+    // when
+    mockCache.createCashOrder(createCashOrderRs1, USER_LOGIN);
+
+    // then
+    Assert.assertNotNull(cashOrderById);
+    Assert.assertNotNull(cashOrderById.get("101"));
+    Assert.assertEquals(cashOrderById.get("101").getCashOrderStatus(), CashOrderStatus.CREATED);
+
+    // when
+    mockCache.updateStatusCashOrder(updStCashOrderRs);
+
+    // then
+    Assert.assertEquals(cashOrderById.size(), 1);
+    Assert.assertNotNull(cashOrderById.get("101"));
+    Assert.assertEquals(cashOrderById.get("101").getCashOrderStatus(), CashOrderStatus.COMMITTED);
+  }
+
+  @Test
+  public void testCheckCashOrdersLimitByUser() {
+    // when
+    mockCache.createCashOrder(createCashOrderRs1, USER_LOGIN);
+    LimitStatusType limitStatusType = mockCache.checkCashOrdersLimitByUser(USER_LOGIN);
+    // then
+    Assert.assertEquals(limitStatusType, LimitStatusType.LIMIT_PASSED);
+
+    // when
+    mockCache.createCashOrder(createCashOrderRs2, USER_LOGIN);
+    LimitStatusType limitStatusType2 = mockCache.checkCashOrdersLimitByUser(USER_LOGIN);
+    // then
+    Assert.assertEquals(limitStatusType2, LimitStatusType.LIMIT_ERROR);
+  }
+
 }

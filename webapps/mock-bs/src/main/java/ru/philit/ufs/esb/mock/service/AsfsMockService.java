@@ -129,7 +129,8 @@ public class AsfsMockService extends CommonMockService implements MessageProcess
     response.getSrvCreateCashOrderRsMessage().getKO1().setUserFullName("Иванов Иван Иванович");
     response.getSrvCreateCashOrderRsMessage().getKO1().setUserPosition("Программист");
 
-    mockCache.createCashOrder(request, response);
+    mockCache.createCashOrder(response, request.getSrvCreateCashOrderRqMessage()
+        .getAdditionalInfo().getUserLogin());
 
     return response;
   }
@@ -145,7 +146,7 @@ public class AsfsMockService extends CommonMockService implements MessageProcess
     response.getSrvUpdCashOrderRsMessage().setCashOrderStatus(CashOrderStatusType.COMMITTED);
     response.getSrvUpdCashOrderRsMessage().setCashOrderType(CashOrderType.KO_1);
 
-    mockCache.updateStatusCashOrder(request, response);
+    mockCache.updateStatusCashOrder(response);
 
     return response;
   }

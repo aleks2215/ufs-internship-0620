@@ -229,8 +229,7 @@ public class HazelcastMockCacheImpl implements MockCache {
   }
 
   @Override
-  public synchronized void createCashOrder(SrvCreateCashOrderRq cashOrderRq,
-      SrvCreateCashOrderRs cashOrderRs) {
+  public synchronized void createCashOrder(SrvCreateCashOrderRs cashOrderRs, String userLogin) {
     KO1 response = cashOrderRs.getSrvCreateCashOrderRsMessage().getKO1();
     CashOrder cachedCashOrder = new CashOrder();
     cachedCashOrder.setResponseCode(response.getResponseCode());
@@ -266,15 +265,13 @@ public class HazelcastMockCacheImpl implements MockCache {
     cachedCashOrder.setUserFullName(response.getUserFullName());
     cachedCashOrder.setUserPosition(response.getUserPosition());
 
-    cachedCashOrder.setUserLogin(cashOrderRq.getSrvCreateCashOrderRqMessage()
-        .getAdditionalInfo().getUserLogin());
+    cachedCashOrder.setUserLogin(userLogin);
 
     hazelcastServer.getCashOrderById().put(response.getCashOrderId(), cachedCashOrder);
   }
 
   @Override
-  public synchronized void updateStatusCashOrder(SrvUpdStCashOrderRq updStCashOrderRq,
-      SrvUpdStCashOrderRs updStCashOrderRs) {
+  public synchronized void updateStatusCashOrder(SrvUpdStCashOrderRs updStCashOrderRs) {
     SrvUpdCashOrderRsMessage response = updStCashOrderRs.getSrvUpdCashOrderRsMessage();
     CashOrder updatedCashOrder = hazelcastServer.getCashOrderById().get(response.getCashOrderId());
     if (updatedCashOrder != null) {

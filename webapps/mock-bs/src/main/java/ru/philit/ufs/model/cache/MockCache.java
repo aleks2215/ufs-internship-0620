@@ -38,14 +38,13 @@ public interface MockCache {
   OperationPackageInfo getPackageInfo(Long packageId);
 
   Map<Long, List<SrvGetTaskClOperPkgRsMessage.PkgItem.ToCardDeposit.TaskItem>>
-        searchTasksCardDeposit(Long packageId, PkgTaskStatusType taskStatus, Date fromDate,
-        Date toDate, List<Long> taskIds);
+      searchTasksCardDeposit(Long packageId, PkgTaskStatusType taskStatus, Date fromDate,
+      Date toDate, List<Long> taskIds);
 
-  void createCashOrder(SrvCreateCashOrderRq cashOrderRq, SrvCreateCashOrderRs cashOrderRs);
+  void createCashOrder(SrvCreateCashOrderRs cashOrderRs, String userLogin);
 
-  void updateStatusCashOrder(SrvUpdStCashOrderRq updStCashOrderRq,
-      SrvUpdStCashOrderRs updStCashOrderRs);
+  void updateStatusCashOrder(SrvUpdStCashOrderRs updStCashOrderRs);
 
-  public LimitStatusType checkCashOrdersLimitByUser(String userLogin);
+  LimitStatusType checkCashOrdersLimitByUser(String userLogin);
 
 }
