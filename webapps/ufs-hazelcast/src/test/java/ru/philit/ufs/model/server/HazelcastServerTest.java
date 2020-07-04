@@ -64,6 +64,10 @@ public class HazelcastServerTest {
     Assert.assertNotNull(hazelcastServer.getRepresentativeByCardMap());
     Assert.assertNotNull(hazelcastServer.getOperatorByUserMap());
     Assert.assertNotNull(hazelcastServer.getCashSymbolsMap());
+    Assert.assertNotNull(hazelcastServer.getCashOrderResponseMap());
+    Assert.assertNotNull(hazelcastServer.getCheckOverLimitMap());
+    Assert.assertNotNull(hazelcastServer.getWorkplaceInfoByUidMap());
+    Assert.assertNotNull(hazelcastServer.getConfirmedCashOrders());
     hazelcastServer.shutdown();
   }
 
