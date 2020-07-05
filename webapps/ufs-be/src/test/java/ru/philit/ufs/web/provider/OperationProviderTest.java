@@ -24,6 +24,7 @@ import ru.philit.ufs.model.cache.MockCache;
 import ru.philit.ufs.model.cache.OperationCache;
 import ru.philit.ufs.model.cache.mock.MockCacheImpl;
 import ru.philit.ufs.model.entity.common.OperationTypeCode;
+import ru.philit.ufs.model.entity.oper.CashOrder;
 import ru.philit.ufs.model.entity.oper.Operation;
 import ru.philit.ufs.model.entity.oper.OperationPackage;
 import ru.philit.ufs.model.entity.oper.OperationPackageRequest;
@@ -260,6 +261,34 @@ public class OperationProviderTest {
     verify(operationCache, times(1))
         .addOperation(anyLong(), any(Operation.class));
     verifyNoMoreInteractions(operationCache);
+  }
+
+  @Test
+  public void testConfirmOperation_ConfirmedCashOrders() throws Exception {
+    // given
+    OperationPackage opPackage = new OperationPackage();
+
+    // when
+    when(operationCache.getTasksInPackage(any(OperationTasksRequest.class), any(ClientInfo.class)))
+        .thenReturn(opPackage);
+    when(operationCache.updateTasksInPackage(any(OperationPackage.class), any(ClientInfo.class)))
+        .thenReturn(opPackage);
+    doNothing().when(operationCache)
+        .addOperation(anyLong(), any(Operation.class));
+    when(asfsCache.createCashOrder(any(CashOrder.class), any(ClientInfo.class)))
+        .thenReturn(new CashOrder());
+    when(asfsCache.updateStatusCashOrder(any(CashOrder.class), any(ClientInfo.class)))
+        .thenReturn(new CashOrder());
+    provider.confirmOperation(PACKAGE_ID, TASK_ID, WORKPLACE_ID, TYPE_CODE, CLIENT_INFO);
+
+    // verify
+    verify(asfsCache, times(1))
+        .createCashOrder(any(CashOrder.class), any(ClientInfo.class));
+    verify(asfsCache, times(1))
+        .updateStatusCashOrder(any(CashOrder.class), any(ClientInfo.class));
+    verify(asfsCache, times(1))
+        .addConfirmedCashOrder(any(CashOrder.class));
+    verifyNoMoreInteractions(asfsCache);
   }
 
   @Test

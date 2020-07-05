@@ -12,6 +12,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import com.google.common.collect.ImmutableList;
+import com.hazelcast.core.IList;
 import com.hazelcast.core.IMap;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -35,8 +36,11 @@ import ru.philit.ufs.model.entity.common.ExternalEntityContainer;
 import ru.philit.ufs.model.entity.common.LocalKey;
 import ru.philit.ufs.model.entity.oper.CashDepositAnnouncement;
 import ru.philit.ufs.model.entity.oper.CashDepositAnnouncementsRequest;
+import ru.philit.ufs.model.entity.oper.CashOrder;
+import ru.philit.ufs.model.entity.oper.CashOrderStatus;
 import ru.philit.ufs.model.entity.oper.CashSymbol;
 import ru.philit.ufs.model.entity.oper.CashSymbolRequest;
+import ru.philit.ufs.model.entity.oper.CheckOverLimitRequest;
 import ru.philit.ufs.model.entity.oper.Operation;
 import ru.philit.ufs.model.entity.oper.OperationPackage;
 import ru.philit.ufs.model.entity.oper.OperationPackageRequest;
@@ -49,10 +53,11 @@ import ru.philit.ufs.model.entity.request.RequestType;
 import ru.philit.ufs.model.entity.user.ClientInfo;
 import ru.philit.ufs.model.entity.user.Operator;
 import ru.philit.ufs.model.entity.user.User;
+import ru.philit.ufs.model.entity.user.Workplace;
 import ru.philit.ufs.service.AuditService;
 import ru.philit.ufs.web.exception.UserNotFoundException;
 
-public class HazelcastCacheImplTest {
+public class  HazelcastCacheImplTest {
 
   private static final String SESSION_ID = "0";
   private static final User USER = new User("login");
@@ -96,6 +101,13 @@ public class HazelcastCacheImplTest {
       new MockIMap<>();
   private final IMap<LocalKey<String>, Operator> operatorByUserMap = new MockIMap<>();
 
+  private IMap<LocalKey<CashOrder>, CashOrder> cashOrderResponseMap = new MockIMap<>();
+  private IMap<LocalKey<CheckOverLimitRequest>, ExternalEntityContainer<Boolean>>
+      checkOverLimitMap = new MockIMap<>();
+  private IMap<LocalKey<String>, Workplace> workplaceInfoByUidMap = new MockIMap<>();
+
+  private IList<CashOrder> confirmedCashOrders = new MockIList<>();
+
   @Mock
   private HazelcastBeClient client;
   @Mock
@@ -131,6 +143,10 @@ public class HazelcastCacheImplTest {
     when(client.getRepresentativeMap()).thenReturn(representativeMap);
     when(client.getRepresentativeByCardNumberMap()).thenReturn(representativeByCardNumberMap);
     when(client.getOperatorByUserMap()).thenReturn(operatorByUserMap);
+    when(client.getCashOrderResponseMap()).thenReturn(cashOrderResponseMap);
+    when(client.getCheckOverLimitMap()).thenReturn(checkOverLimitMap);
+    when(client.getWorkplaceInfoByUidMap()).thenReturn(workplaceInfoByUidMap);
+    when(client.getConfirmedCashOrders()).thenReturn(confirmedCashOrders);
 
     doAnswer(new Answer() {
       @Override
@@ -190,6 +206,16 @@ public class HazelcastCacheImplTest {
           case RequestType.OPERATOR_BY_USER:
             operatorByUserMap.put(key, new Operator());
             break;
+          case RequestType.CREATE_CASH_ORDER:
+          case RequestType.UPDATE_STATUS_CASH_ORDER:
+            cashOrderResponseMap.put(key, new CashOrder());
+            break;
+          case RequestType.CHECK_OVER_LIMIT:
+            checkOverLimitMap.put(key, new ExternalEntityContainer<>(true));
+            break;
+          case RequestType.GET_WORKPLACE_INFO:
+            workplaceInfoByUidMap.put(key, new Workplace());
+            break;
           default:
         }
         return null;
@@ -225,6 +251,10 @@ public class HazelcastCacheImplTest {
     assertNotNull(cache.getRepresentativesByCriteria(new RepresentativeRequest("1"), CLIENT_INFO));
     assertNotNull(cache.getCashSymbols(new CashSymbolRequest(), CLIENT_INFO));
     assertNotNull(cache.getOperator("1", CLIENT_INFO));
+    assertNotNull(cache.createCashOrder(new CashOrder(), CLIENT_INFO));
+    assertNotNull(cache.updateStatusCashOrder(new CashOrder(), CLIENT_INFO));
+    assertTrue(cache.checkOverLimit(new CheckOverLimitRequest(), CLIENT_INFO));
+    assertNotNull(cache.getWorkplace("1", CLIENT_INFO));
 
     Operation operation = new Operation();
     operation.setId(OPERATION_ID);
@@ -272,5 +302,18 @@ public class HazelcastCacheImplTest {
   @Test(expected = UserNotFoundException.class)
   public void testUserNotFound() throws Exception {
     cache.getUser(SESSION_ID);
+  }
+
+  @Test
+  public void testConfirmedCashOrders() throws Exception {
+    CashOrder cashOrderTest;
+    cashOrderTest = new CashOrder();
+    cashOrderTest.setCashOrderId("101");
+    cashOrderTest.setCashOrderStatus(CashOrderStatus.COMMITTED);
+
+    cache.addConfirmedCashOrder(cashOrderTest);
+
+    assertEquals(cache.getConfirmedCashOrders().size(), 1);
+    assertEquals(cache.getConfirmedCashOrders().get(0), cashOrderTest);
   }
 }

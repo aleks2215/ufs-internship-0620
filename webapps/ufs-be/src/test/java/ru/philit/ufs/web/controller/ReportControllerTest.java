@@ -5,10 +5,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +23,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import ru.philit.ufs.model.entity.account.Representative;
 import ru.philit.ufs.model.entity.common.OperationTypeCode;
+import ru.philit.ufs.model.entity.oper.CashOrder;
 import ru.philit.ufs.model.entity.oper.Operation;
 import ru.philit.ufs.model.entity.oper.OperationPackage;
 import ru.philit.ufs.model.entity.oper.OperationTask;
@@ -28,6 +33,7 @@ import ru.philit.ufs.model.entity.user.ClientInfo;
 import ru.philit.ufs.model.entity.user.Operator;
 import ru.philit.ufs.model.entity.user.Subbranch;
 import ru.philit.ufs.model.entity.user.User;
+import ru.philit.ufs.web.dto.CashOrderJournalDto;
 import ru.philit.ufs.web.dto.OperationJournalDto;
 import ru.philit.ufs.web.mapping.CashOrderJournalMapper;
 import ru.philit.ufs.web.mapping.OperationJournalMapper;
@@ -35,6 +41,7 @@ import ru.philit.ufs.web.mapping.impl.CashOrderJournalMapperImpl;
 import ru.philit.ufs.web.mapping.impl.OperationJournalMapperImpl;
 import ru.philit.ufs.web.provider.ReportProvider;
 import ru.philit.ufs.web.provider.RepresentativeProvider;
+import ru.philit.ufs.web.view.GetCashOrderJournalResp;
 import ru.philit.ufs.web.view.GetOperationJournalReq;
 import ru.philit.ufs.web.view.GetOperationJournalResp;
 
@@ -107,12 +114,38 @@ public class ReportControllerTest extends RestControllerTest {
 
     assertNotNull(response.getData());
     assertTrue(response.getData() instanceof List);
-    assertEquals(((List)response.getData()).size(), 1);
-    assertEquals(((List)response.getData()).get(0).getClass(), OperationJournalDto.class);
-    OperationJournalDto controlDto = (OperationJournalDto) ((List)response.getData()).get(0);
+    assertEquals(((List) response.getData()).size(), 1);
+    assertEquals(((List) response.getData()).get(0).getClass(), OperationJournalDto.class);
+    OperationJournalDto controlDto = (OperationJournalDto) ((List) response.getData()).get(0);
     assertNotNull(controlDto.getOperation());
     //assertEquals(controlDto.getOperation().getAmount(), "1400");
     assertNotNull(controlDto.getRepresentative());
     //assertEquals(controlDto.getRepresentative().getFullName(), "Петров Петр Петрович");
+  }
+
+  @Test
+  public void testGetCashOrderJournal() throws Exception {
+    List<CashOrder> cashOrdersList = new ArrayList<>();
+    CashOrder cashOrder1 = new CashOrder();
+    cashOrder1.setCashOrderId("101");
+    cashOrdersList.add(cashOrder1);
+
+    CashOrder cashOrder2 = new CashOrder();
+    cashOrder2.setCashOrderId("102");
+    cashOrdersList.add(cashOrder2);
+
+    when(reportProvider.getConfirmedCashOrders())
+        .thenReturn(cashOrdersList);
+
+    String responseJson = performAndGetContent(post("/report/cashOrderJournal"));
+    GetCashOrderJournalResp response = toResponse(responseJson, GetCashOrderJournalResp.class);
+
+    assertTrue(response.isSuccess());
+    assertNotNull(response.getData());
+    assertEquals((response.getData()).get(0).getClass(), CashOrderJournalDto.class);
+    assertEquals((response.getData()).size(), 2);
+
+    verify(reportProvider, times(1)).getConfirmedCashOrders();
+    verifyNoMoreInteractions(reportProvider);
   }
 }

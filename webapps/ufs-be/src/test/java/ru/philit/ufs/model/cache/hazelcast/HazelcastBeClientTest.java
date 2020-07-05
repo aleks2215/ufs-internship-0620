@@ -76,6 +76,10 @@ public class HazelcastBeClientTest {
     hazelcastBeClient.getOperationPackageResponseMap();
     hazelcastBeClient.getRepresentativeMap();
     hazelcastBeClient.getRepresentativeByCardNumberMap();
+    hazelcastBeClient.getCashOrderResponseMap();
+    hazelcastBeClient.getCheckOverLimitMap();
+    hazelcastBeClient.getWorkplaceInfoByUidMap();
+    hazelcastBeClient.getConfirmedCashOrders();
   }
 
   @Test

@@ -24,7 +24,9 @@ public class CashOrderJournalMapperImpl extends CommonMapperImpl implements Cash
     if (in.getCashOrderTypeModel() != null) {
       out.setCashOrderType(in.getCashOrderTypeModel().code());
     }
-    out.setAmount(in.getAmount().toString());
+    if (in.getAmount() != null) {
+      out.setAmount(in.getAmount().toString());
+    }
     out.setUserLogin(in.getUserLogin());
 
     return out;

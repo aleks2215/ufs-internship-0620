@@ -193,8 +193,8 @@ public class OperationProvider {
     asfsCache.addConfirmedCashOrder(cashOrder);
 
     Operation operation = mockCache.createOperation(workplaceId, operationTypeCode);
-    operation = mockCache.commitOperation(operation);
     operation.setCashOrderId(cashOrder);
+    operation = mockCache.commitOperation(operation);
 
     operationCache.addOperation(taskId, operation);
 
