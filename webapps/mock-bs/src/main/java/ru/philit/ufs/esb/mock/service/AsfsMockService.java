@@ -12,25 +12,25 @@ import ru.philit.ufs.esb.MessageProcessor;
 import ru.philit.ufs.esb.mock.client.EsbClient;
 import ru.philit.ufs.model.cache.MockCache;
 import ru.philit.ufs.model.converter.esb.JaxbConverter;
-import ru.philit.ufs.model.entity.esb.as_fs.CashOrderStatusType;
-import ru.philit.ufs.model.entity.esb.as_fs.CashOrderType;
-import ru.philit.ufs.model.entity.esb.as_fs.HeaderInfoType;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvCheckOverLimitRq;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvCheckOverLimitRs;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvCheckOverLimitRs.SrvCheckOverLimitRsMessage;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvCreateCashOrderRq;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvCreateCashOrderRs;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvCreateCashOrderRs.SrvCreateCashOrderRsMessage;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvCreateCashOrderRs.SrvCreateCashOrderRsMessage.KO1;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvCreateCashOrderRs.SrvCreateCashOrderRsMessage.KO1.CashSymbols;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvGetWorkPlaceInfoRq;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvGetWorkPlaceInfoRs;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvGetWorkPlaceInfoRs.SrvGetWorkPlaceInfoRsMessage;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvGetWorkPlaceInfoRs.SrvGetWorkPlaceInfoRsMessage.WorkPlaceOperationTypeLimit;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvGetWorkPlaceInfoRs.SrvGetWorkPlaceInfoRsMessage.WorkPlaceOperationTypeLimit.OperationTypeLimitItem;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvUpdStCashOrderRq;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvUpdStCashOrderRs;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvUpdStCashOrderRs.SrvUpdCashOrderRsMessage;
+import ru.philit.ufs.model.entity.esb.asfs.CashOrderStatusType;
+import ru.philit.ufs.model.entity.esb.asfs.CashOrderType;
+import ru.philit.ufs.model.entity.esb.asfs.HeaderInfoType;
+import ru.philit.ufs.model.entity.esb.asfs.SrvCheckOverLimitRq;
+import ru.philit.ufs.model.entity.esb.asfs.SrvCheckOverLimitRs;
+import ru.philit.ufs.model.entity.esb.asfs.SrvCheckOverLimitRs.SrvCheckOverLimitRsMessage;
+import ru.philit.ufs.model.entity.esb.asfs.SrvCreateCashOrderRq;
+import ru.philit.ufs.model.entity.esb.asfs.SrvCreateCashOrderRs;
+import ru.philit.ufs.model.entity.esb.asfs.SrvCreateCashOrderRs.SrvCreateCashOrderRsMessage;
+import ru.philit.ufs.model.entity.esb.asfs.SrvCreateCashOrderRs.SrvCreateCashOrderRsMessage.KO1;
+import ru.philit.ufs.model.entity.esb.asfs.SrvCreateCashOrderRs.SrvCreateCashOrderRsMessage.KO1.CashSymbols;
+import ru.philit.ufs.model.entity.esb.asfs.SrvGetWorkPlaceInfoRq;
+import ru.philit.ufs.model.entity.esb.asfs.SrvGetWorkPlaceInfoRs;
+import ru.philit.ufs.model.entity.esb.asfs.SrvGetWorkPlaceInfoRs.SrvGetWorkPlaceInfoRsMessage;
+import ru.philit.ufs.model.entity.esb.asfs.SrvGetWorkPlaceInfoRs.SrvGetWorkPlaceInfoRsMessage.WorkPlaceOperationTypeLimit;
+import ru.philit.ufs.model.entity.esb.asfs.SrvGetWorkPlaceInfoRs.SrvGetWorkPlaceInfoRsMessage.WorkPlaceOperationTypeLimit.OperationTypeLimitItem;
+import ru.philit.ufs.model.entity.esb.asfs.SrvUpdStCashOrderRq;
+import ru.philit.ufs.model.entity.esb.asfs.SrvUpdStCashOrderRs;
+import ru.philit.ufs.model.entity.esb.asfs.SrvUpdStCashOrderRs.SrvUpdCashOrderRsMessage;
 
 
 /**
@@ -39,7 +39,7 @@ import ru.philit.ufs.model.entity.esb.as_fs.SrvUpdStCashOrderRs.SrvUpdCashOrderR
 @Service
 public class AsfsMockService extends CommonMockService implements MessageProcessor {
 
-  private static final String CONTEXT_PATH = "ru.philit.ufs.model.entity.esb.as_fs";
+  private static final String CONTEXT_PATH = "ru.philit.ufs.model.entity.esb.asfs";
 
   private final Logger logger = LoggerFactory.getLogger(this.getClass());
 

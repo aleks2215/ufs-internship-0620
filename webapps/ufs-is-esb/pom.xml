@@ -91,7 +91,7 @@
               <goal>xjc</goal>
             </goals>
             <configuration>
-              <packageName>ru.philit.ufs.model.entity.esb.as_fs</packageName>
+              <packageName>ru.philit.ufs.model.entity.esb.asfs</packageName>
               <sources>
                 <source>src/main/resources/xsd/as_fs.xsd</source>
               </sources>

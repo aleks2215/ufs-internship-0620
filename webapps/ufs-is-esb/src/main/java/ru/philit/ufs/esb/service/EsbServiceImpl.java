@@ -33,10 +33,10 @@ import ru.philit.ufs.model.entity.account.AccountOperationRequest;
 import ru.philit.ufs.model.entity.account.RepresentativeRequest;
 import ru.philit.ufs.model.entity.common.ExternalEntity;
 import ru.philit.ufs.model.entity.common.ExternalEntityRequest;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvCheckOverLimitRq;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvCreateCashOrderRq;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvGetWorkPlaceInfoRq;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvUpdStCashOrderRq;
+import ru.philit.ufs.model.entity.esb.asfs.SrvCheckOverLimitRq;
+import ru.philit.ufs.model.entity.esb.asfs.SrvCreateCashOrderRq;
+import ru.philit.ufs.model.entity.esb.asfs.SrvGetWorkPlaceInfoRq;
+import ru.philit.ufs.model.entity.esb.asfs.SrvUpdStCashOrderRq;
 import ru.philit.ufs.model.entity.esb.eks.SrvAccountByCardNumRq;
 import ru.philit.ufs.model.entity.esb.eks.SrvAccountByIdRq;
 import ru.philit.ufs.model.entity.esb.eks.SrvAccountResiduesByIdRq;
@@ -82,7 +82,7 @@ public class EsbServiceImpl
 
   private static final String EKS_CONTEXT_PATH = "ru.philit.ufs.model.entity.esb.eks";
   private static final String PPRB_CONTEXT_PATH = "ru.philit.ufs.model.entity.esb.pprb";
-  private static final String ASFS_CONTEXT_PATH = "ru.philit.ufs.model.entity.esb.as_fs";
+  private static final String ASFS_CONTEXT_PATH = "ru.philit.ufs.model.entity.esb.asfs";
 
   private final EsbClient esbClient;
   private final IsEsbCache isEsbCache;

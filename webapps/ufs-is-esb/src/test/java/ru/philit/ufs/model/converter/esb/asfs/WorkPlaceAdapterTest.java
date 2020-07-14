@@ -9,11 +9,11 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.philit.ufs.model.converter.esb.multi.MultiAdapter;
 import ru.philit.ufs.model.entity.common.ExternalEntity;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvGetWorkPlaceInfoRq;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvGetWorkPlaceInfoRs;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvGetWorkPlaceInfoRs.SrvGetWorkPlaceInfoRsMessage;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvGetWorkPlaceInfoRs.SrvGetWorkPlaceInfoRsMessage.WorkPlaceOperationTypeLimit;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvGetWorkPlaceInfoRs.SrvGetWorkPlaceInfoRsMessage.WorkPlaceOperationTypeLimit.OperationTypeLimitItem;
+import ru.philit.ufs.model.entity.esb.asfs.SrvGetWorkPlaceInfoRq;
+import ru.philit.ufs.model.entity.esb.asfs.SrvGetWorkPlaceInfoRs;
+import ru.philit.ufs.model.entity.esb.asfs.SrvGetWorkPlaceInfoRs.SrvGetWorkPlaceInfoRsMessage;
+import ru.philit.ufs.model.entity.esb.asfs.SrvGetWorkPlaceInfoRs.SrvGetWorkPlaceInfoRsMessage.WorkPlaceOperationTypeLimit;
+import ru.philit.ufs.model.entity.esb.asfs.SrvGetWorkPlaceInfoRs.SrvGetWorkPlaceInfoRsMessage.WorkPlaceOperationTypeLimit.OperationTypeLimitItem;
 import ru.philit.ufs.model.entity.user.Workplace;
 import ru.philit.ufs.model.entity.user.WorkplaceType;
 

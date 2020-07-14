@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.UUID;
 import ru.philit.ufs.model.converter.esb.CommonAdapter;
 import ru.philit.ufs.model.entity.common.ExternalEntity;
-import ru.philit.ufs.model.entity.esb.as_fs.HeaderInfoType;
+import ru.philit.ufs.model.entity.esb.asfs.HeaderInfoType;
 
 
 /**
@@ -13,7 +13,7 @@ import ru.philit.ufs.model.entity.esb.as_fs.HeaderInfoType;
 public class AsfsAdapter extends CommonAdapter {
 
   public static final String REQUEST_SYSTEM = "ufs";
-  public static final String RESPONSE_SYSTEM = "as_fs";
+  public static final String RESPONSE_SYSTEM = "asfs";
 
   /**
    * Создаёт HeaderInfo для транспортного объекта интеграции с ЕКС.

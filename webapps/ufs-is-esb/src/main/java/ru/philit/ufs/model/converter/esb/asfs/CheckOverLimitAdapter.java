@@ -1,10 +1,10 @@
 package ru.philit.ufs.model.converter.esb.asfs;
 
 import ru.philit.ufs.model.entity.common.ExternalEntityContainer;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvCheckOverLimitRq;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvCheckOverLimitRq.SrvCheckOverLimitRqMessage;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvCheckOverLimitRs;
-import ru.philit.ufs.model.entity.esb.as_fs.SrvCheckOverLimitRs.SrvCheckOverLimitRsMessage;
+import ru.philit.ufs.model.entity.esb.asfs.SrvCheckOverLimitRq;
+import ru.philit.ufs.model.entity.esb.asfs.SrvCheckOverLimitRq.SrvCheckOverLimitRqMessage;
+import ru.philit.ufs.model.entity.esb.asfs.SrvCheckOverLimitRs;
+import ru.philit.ufs.model.entity.esb.asfs.SrvCheckOverLimitRs.SrvCheckOverLimitRsMessage;
 import ru.philit.ufs.model.entity.oper.CheckOverLimitRequest;
 import ru.philit.ufs.model.entity.oper.OverLimitStatus;
 

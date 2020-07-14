@@ -3,7 +3,7 @@ package ru.philit.ufs.model.converter.esb.asfs;
 import org.junit.Assert;
 import ru.philit.ufs.model.converter.ConverterBaseTest;
 import ru.philit.ufs.model.entity.common.ExternalEntity;
-import ru.philit.ufs.model.entity.esb.as_fs.HeaderInfoType;
+import ru.philit.ufs.model.entity.esb.asfs.HeaderInfoType;
 
 public class AsfsAdapterBaseTest extends ConverterBaseTest {
   /**
