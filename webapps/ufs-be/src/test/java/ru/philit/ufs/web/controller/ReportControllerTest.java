@@ -12,15 +12,19 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+import ru.philit.ufs.DateUtil;
 import ru.philit.ufs.model.entity.account.Representative;
 import ru.philit.ufs.model.entity.common.OperationTypeCode;
 import ru.philit.ufs.model.entity.oper.CashOrder;
@@ -41,6 +45,7 @@ import ru.philit.ufs.web.mapping.impl.CashOrderJournalMapperImpl;
 import ru.philit.ufs.web.mapping.impl.OperationJournalMapperImpl;
 import ru.philit.ufs.web.provider.ReportProvider;
 import ru.philit.ufs.web.provider.RepresentativeProvider;
+import ru.philit.ufs.web.view.GetCashOrderJournalReq;
 import ru.philit.ufs.web.view.GetCashOrderJournalResp;
 import ru.philit.ufs.web.view.GetOperationJournalReq;
 import ru.philit.ufs.web.view.GetOperationJournalResp;
@@ -125,19 +130,26 @@ public class ReportControllerTest extends RestControllerTest {
 
   @Test
   public void testGetCashOrderJournal() throws Exception {
+    GetCashOrderJournalReq request = new GetCashOrderJournalReq();
+    request.setFromDate("28.05.2020");
+    request.setToDate("31.05.2017");
+
     List<CashOrder> cashOrdersList = new ArrayList<>();
     CashOrder cashOrder1 = new CashOrder();
     cashOrder1.setCashOrderId("101");
+    cashOrder1.setCreatedDttm(DateUtil.date(2020,5,29,12,22));
     cashOrdersList.add(cashOrder1);
 
     CashOrder cashOrder2 = new CashOrder();
     cashOrder2.setCashOrderId("102");
+    cashOrder1.setCreatedDttm(DateUtil.date(2020,5,30,12,22));
     cashOrdersList.add(cashOrder2);
 
-    when(reportProvider.getConfirmedCashOrders())
+    when(reportProvider.getConfirmedCashOrdersByDate(any(Date.class), any(Date.class)))
         .thenReturn(cashOrdersList);
 
-    String responseJson = performAndGetContent(post("/report/cashOrderJournal"));
+    String responseJson = performAndGetContent(post("/report/cashOrderJournal")
+        .content(toRequest(request)));
     GetCashOrderJournalResp response = toResponse(responseJson, GetCashOrderJournalResp.class);
 
     assertTrue(response.isSuccess());
@@ -145,7 +157,11 @@ public class ReportControllerTest extends RestControllerTest {
     assertEquals((response.getData()).get(0).getClass(), CashOrderJournalDto.class);
     assertEquals((response.getData()).size(), 2);
 
-    verify(reportProvider, times(1)).getConfirmedCashOrders();
+    verify(reportProvider, times(1))
+        .getConfirmedCashOrdersByDate(any(Date.class), any(Date.class));
     verifyNoMoreInteractions(reportProvider);
+
   }
+
+
 }

@@ -14,13 +14,16 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+import ru.philit.ufs.DateUtil;
 import ru.philit.ufs.model.cache.AnnouncementCache;
 import ru.philit.ufs.model.cache.AsfsCache;
 import ru.philit.ufs.model.cache.MockCache;
@@ -28,6 +31,7 @@ import ru.philit.ufs.model.cache.OperationCache;
 import ru.philit.ufs.model.cache.UserCache;
 import ru.philit.ufs.model.cache.mock.MockCacheImpl;
 import ru.philit.ufs.model.entity.account.AccountOperationRequest;
+import ru.philit.ufs.model.entity.oper.CashOrder;
 import ru.philit.ufs.model.entity.oper.Operation;
 import ru.philit.ufs.model.entity.oper.OperationPackage;
 import ru.philit.ufs.model.entity.oper.OperationTask;
@@ -213,6 +217,48 @@ public class ReportProviderTest {
 
     // verify
     verifyZeroInteractions(announcementCache);
+  }
+
+  @Test
+  public void testGetConfirmedCashOrdersByDate() throws Exception {
+    // given
+    List<CashOrder> cashOrdersFromCache = new ArrayList<>();
+    CashOrder cashOrder1 = new CashOrder();
+    cashOrder1.setCashOrderId("101");
+    cashOrder1.setCreatedDttm(DateUtil.date(2020, 5, 29, 12, 22));
+    cashOrdersFromCache.add(cashOrder1);
+
+    CashOrder cashOrder2 = new CashOrder();
+    cashOrder2.setCashOrderId("102");
+    cashOrder2.setCreatedDttm(DateUtil.date(2020, 6, 29, 12, 22));
+    cashOrdersFromCache.add(cashOrder2);
+
+    // when
+    when(asfsCache.getConfirmedCashOrders())
+        .thenReturn(cashOrdersFromCache);
+    List<CashOrder> cashOrdersByDate = provider
+        .getConfirmedCashOrdersByDate(DateUtil.date(2020, 5, 27, 12, 22),
+            DateUtil.date(2020, 6, 1, 12, 22));
+
+    // then
+    assertNotNull(cashOrdersByDate);
+    Assert.assertEquals(cashOrdersByDate.size(), 1);
+
+    // verify
+    verify(asfsCache, times(1)).getConfirmedCashOrders();
+    verifyNoMoreInteractions(operationCache);
+  }
+
+  @Test(expected = InvalidDataException.class)
+  public void testGetConfirmedCashOrdersByDate_NullDateFrom() throws Exception {
+    // when
+    provider.getConfirmedCashOrdersByDate(null, DATE);
+  }
+
+  @Test(expected = InvalidDataException.class)
+  public void testGetConfirmedCashOrdersByDate_NullDateTo() throws Exception {
+    // when
+    provider.getConfirmedCashOrdersByDate(DATE, null);
   }
 
 }

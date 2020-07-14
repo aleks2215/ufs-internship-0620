@@ -23,6 +23,7 @@ import ru.philit.ufs.web.mapping.CashOrderJournalMapper;
 import ru.philit.ufs.web.mapping.OperationJournalMapper;
 import ru.philit.ufs.web.provider.ReportProvider;
 import ru.philit.ufs.web.provider.RepresentativeProvider;
+import ru.philit.ufs.web.view.GetCashOrderJournalReq;
 import ru.philit.ufs.web.view.GetCashOrderJournalResp;
 import ru.philit.ufs.web.view.GetOperationJournalReq;
 import ru.philit.ufs.web.view.GetOperationJournalResp;
@@ -58,7 +59,7 @@ public class ReportController {
   /**
    * Получение списка записей журнала операций.
    *
-   * @param request параметры запроса списка
+   * @param request    параметры запроса списка
    * @param clientInfo информация о клиенте
    * @return список записей
    */
@@ -83,7 +84,7 @@ public class ReportController {
 
         Operator operator = reportProvider.getOperator(opPackage.getUserLogin(), clientInfo);
         User taskUser = reportProvider.getUser(opPackage.getUserLogin());
-        BigDecimal commissionAmount =  reportProvider.getCommission(
+        BigDecimal commissionAmount = reportProvider.getCommission(
             taskCardDeposit.getAccountId(), taskCardDeposit.getAmount(), operation, clientInfo
         );
         Representative representative = representativeProvider.getRepresentativeById(
@@ -110,13 +111,15 @@ public class ReportController {
    * @return список записей
    */
   @RequestMapping(value = "/cashOrderJournal", method = RequestMethod.POST)
-  public GetCashOrderJournalResp getCashOrderJournal() {
+  public GetCashOrderJournalResp getCashOrderJournal(@RequestBody GetCashOrderJournalReq request) {
     List<CashOrderJournalDto> items = new ArrayList<>();
 
-    List<CashOrder> confirmedCashOrders = reportProvider.getConfirmedCashOrders();
+    List<CashOrder> confirmedCashOrdersByDate = reportProvider
+        .getConfirmedCashOrdersByDate(cashOrderJournalMapper.asEntity(request.getFromDate()),
+            cashOrderJournalMapper.asEntity(request.getToDate()));
 
-    for (CashOrder confirmedCashOrder : confirmedCashOrders) {
-      items.add(cashOrderJournalMapper.asDto(confirmedCashOrder));
+    for (CashOrder confirmedCashOrderByDate : confirmedCashOrdersByDate) {
+      items.add(cashOrderJournalMapper.asDto(confirmedCashOrderByDate));
     }
 
     return new GetCashOrderJournalResp().withSuccess(items);

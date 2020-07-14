@@ -39,6 +39,10 @@ public class CashOrderJournalDto {
    */
   private String amount;
   /**
+   * Сумма кассового ордера.
+   */
+  private String createdDttm;
+  /**
    * Логин пользователя.
    */
   private String userLogin;

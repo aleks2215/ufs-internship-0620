@@ -53,8 +53,8 @@ public class ReportProvider {
   /**
    * Получение списка задач пакетов операций для отчёта.
    *
-   * @param fromDate отбирать пакеты с даты
-   * @param toDate отбирать пакеты по дату
+   * @param fromDate   отбирать пакеты с даты
+   * @param toDate     отбирать пакеты по дату
    * @param clientInfo информация о клиенте
    * @return список пакетов со списками выполненных задач
    */
@@ -115,7 +115,7 @@ public class ReportProvider {
   /**
    * Получение объекта оператора.
    *
-   * @param userLogin логин пользователя
+   * @param userLogin  логин пользователя
    * @param clientInfo информация о клиенте
    * @return объект оператора
    */
@@ -126,9 +126,9 @@ public class ReportProvider {
   /**
    * Расчёт комиссии по операции.
    *
-   * @param accountId номер счёта
-   * @param amount сумма операции
-   * @param operation операция клиента
+   * @param accountId  номер счёта
+   * @param amount     сумма операции
+   * @param operation  операция клиента
    * @param clientInfo информация о клиенте
    * @return значение комиссии
    */
@@ -136,7 +136,7 @@ public class ReportProvider {
       Operation operation, ClientInfo clientInfo) {
     return (accountId != null && amount != null && operation != null)
         ? announcementCache.getCommission(
-            new AccountOperationRequest(accountId, amount, operation.getTypeCode()), clientInfo)
+        new AccountOperationRequest(accountId, amount, operation.getTypeCode()), clientInfo)
         : null;
   }
 
@@ -145,7 +145,18 @@ public class ReportProvider {
    *
    * @return подтвержденные кассовые ордера
    */
-  public List<CashOrder> getConfirmedCashOrders() {
-    return asfsCache.getConfirmedCashOrders();
+  public List<CashOrder> getConfirmedCashOrdersByDate(Date fromDate, Date toDate) {
+    if (fromDate == null || toDate == null) {
+      throw new InvalidDataException("Не указаны даты периода журнала");
+    }
+
+    List<CashOrder> cashOrdersByDate = new ArrayList<>();
+    for (CashOrder cashOrder : asfsCache.getConfirmedCashOrders()) {
+      if (cashOrder.getCreatedDttm().compareTo(fromDate) > 0
+          && cashOrder.getCreatedDttm().compareTo(toDate) <= 0) {
+        cashOrdersByDate.add(cashOrder);
+      }
+    }
+    return cashOrdersByDate;
   }
 }

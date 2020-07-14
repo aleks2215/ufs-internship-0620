@@ -1,8 +1,9 @@
 package ru.philit.ufs.web.mapping.impl;
 
+import java.text.ParseException;
+import java.util.Date;
 import org.springframework.stereotype.Component;
 import ru.philit.ufs.model.entity.oper.CashOrder;
-import ru.philit.ufs.web.dto.AccountDto;
 import ru.philit.ufs.web.dto.CashOrderJournalDto;
 import ru.philit.ufs.web.mapping.CashOrderJournalMapper;
 
@@ -27,8 +28,18 @@ public class CashOrderJournalMapperImpl extends CommonMapperImpl implements Cash
     if (in.getAmount() != null) {
       out.setAmount(in.getAmount().toString());
     }
+    out.setCreatedDttm(asLongDateDto(in.getCreatedDttm()));
     out.setUserLogin(in.getUserLogin());
 
     return out;
+  }
+
+  @Override
+  public Date asEntity(String in) {
+    try {
+      return asShortDateEntity(in);
+    } catch (ParseException e) {
+      return null;
+    }
   }
 }
