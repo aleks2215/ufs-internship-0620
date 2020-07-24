@@ -17,6 +17,7 @@ import com.hazelcast.mapreduce.aggregation.Supplier;
 import com.hazelcast.monitor.LocalMapStats;
 import com.hazelcast.projection.Projection;
 import com.hazelcast.query.Predicate;
+import com.hazelcast.query.PredicateBuilder;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -291,6 +292,16 @@ public class MockIMap<K, V> extends HashMap<K, V>
 
   @Override
   public Collection<V> values(Predicate predicate) {
+    if (predicate instanceof PredicateBuilder) {
+      PredicateBuilder predicateBuilder = (PredicateBuilder) predicate;
+
+      String valueToCompare = "PredicateBuilder{\n" + "userLogin=aleks-login" + "\n}";
+
+      if (predicateBuilder.toString().equals(valueToCompare)) {
+        return values();
+      }
+    }
+
     return null;
   }
 

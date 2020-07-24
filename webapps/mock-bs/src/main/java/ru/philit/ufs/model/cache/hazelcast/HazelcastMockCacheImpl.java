@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hazelcast.core.IMap;
+import com.hazelcast.query.EntryObject;
+import com.hazelcast.query.PredicateBuilder;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -28,12 +30,9 @@ import ru.philit.ufs.model.cache.MockCache;
 import ru.philit.ufs.model.entity.esb.asfs.CashOrderStatusType;
 import ru.philit.ufs.model.entity.esb.asfs.CashOrderType;
 import ru.philit.ufs.model.entity.esb.asfs.LimitStatusType;
-import ru.philit.ufs.model.entity.esb.asfs.SrvCreateCashOrderRq;
 import ru.philit.ufs.model.entity.esb.asfs.SrvCreateCashOrderRs;
 import ru.philit.ufs.model.entity.esb.asfs.SrvCreateCashOrderRs.SrvCreateCashOrderRsMessage;
 import ru.philit.ufs.model.entity.esb.asfs.SrvCreateCashOrderRs.SrvCreateCashOrderRsMessage.KO1;
-import ru.philit.ufs.model.entity.esb.asfs.SrvCreateCashOrderRs.SrvCreateCashOrderRsMessage.KO1.CashSymbols;
-import ru.philit.ufs.model.entity.esb.asfs.SrvUpdStCashOrderRq;
 import ru.philit.ufs.model.entity.esb.asfs.SrvUpdStCashOrderRs;
 import ru.philit.ufs.model.entity.esb.asfs.SrvUpdStCashOrderRs.SrvUpdCashOrderRsMessage;
 import ru.philit.ufs.model.entity.esb.eks.PkgStatusType;
@@ -104,7 +103,7 @@ public class HazelcastMockCacheImpl implements MockCache {
     if (!collection.containsKey(packageId)) {
       collection.put(packageId, new HashMap<Long, String>());
     }
-    Long realTaskId = taskId == null ? (long)(Math.random() * 1000000) : taskId;
+    Long realTaskId = taskId == null ? (long) (Math.random() * 1000000) : taskId;
     try {
       final Map<Long, String> taskMap = collection.get(packageId);
       String taskJson = jsonMapper.writeValueAsString(taskBody);
@@ -145,7 +144,7 @@ public class HazelcastMockCacheImpl implements MockCache {
   @Override
   public synchronized OperationPackageInfo createPackage(String inn, String workplaceId,
       String userLogin) {
-    Long packageId = (long)(Math.random() * 10000);
+    Long packageId = (long) (Math.random() * 10000);
     OperationPackageInfo packageInfo = new OperationPackageInfo();
     packageInfo.setId(packageId);
     packageInfo.setInn(inn);
@@ -165,8 +164,8 @@ public class HazelcastMockCacheImpl implements MockCache {
 
   @Override
   public Map<Long, List<SrvGetTaskClOperPkgRsMessage.PkgItem.ToCardDeposit.TaskItem>>
-        searchTasksCardDeposit(Long packageId, PkgTaskStatusType taskStatus, Date fromDate,
-        Date toDate, List<Long> taskIds) {
+      searchTasksCardDeposit(Long packageId, PkgTaskStatusType taskStatus, Date fromDate,
+      Date toDate, List<Long> taskIds) {
     Map<Long, List<SrvGetTaskClOperPkgRsMessage.PkgItem.ToCardDeposit.TaskItem>> targetLists =
         new HashMap<>();
     Collection<Long> packageIds = (packageId != null)
@@ -287,11 +286,15 @@ public class HazelcastMockCacheImpl implements MockCache {
   @Override
   public LimitStatusType checkCashOrdersLimitByUser(String userLogin) {
     BigDecimal amount = BigDecimal.ZERO;
-    for (CashOrder cashOrder : hazelcastServer.getCashOrderById().values()) {
-      if (cashOrder.getUserLogin().equals(userLogin)) {
-        amount = amount.add(cashOrder.getAmount());
-      }
+
+    EntryObject entryObject = new PredicateBuilder().getEntryObject();
+    PredicateBuilder predicate = entryObject.get("userLogin").equal(userLogin);
+
+    Collection<CashOrder> cashOrders = hazelcastServer.getCashOrderById().values(predicate);
+    for (CashOrder cashOrder : cashOrders) {
+      amount = amount.add(cashOrder.getAmount());
     }
+
     if (CASH_ORDER_LIMIT.compareTo(amount) >= 0) {
       return LimitStatusType.LIMIT_PASSED;
     }
