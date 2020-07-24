@@ -1,6 +1,8 @@
 package ru.philit.ufs.web.provider;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,8 +10,10 @@ import org.springframework.util.StringUtils;
 import ru.philit.ufs.model.cache.AsfsCache;
 import ru.philit.ufs.model.cache.MockCache;
 import ru.philit.ufs.model.cache.OperationCache;
-import ru.philit.ufs.model.cache.mock.MockCacheOrder;
+import ru.philit.ufs.model.entity.account.IdentityDocument;
+import ru.philit.ufs.model.entity.account.IdentityDocumentType;
 import ru.philit.ufs.model.entity.account.Representative;
+import ru.philit.ufs.model.entity.common.OperationTypeCode;
 import ru.philit.ufs.model.entity.oper.CashOrder;
 import ru.philit.ufs.model.entity.oper.CashOrderStatus;
 import ru.philit.ufs.model.entity.oper.Operation;
@@ -20,6 +24,7 @@ import ru.philit.ufs.model.entity.oper.OperationTaskCardDeposit;
 import ru.philit.ufs.model.entity.oper.OperationTaskStatus;
 import ru.philit.ufs.model.entity.oper.OperationTasksRequest;
 import ru.philit.ufs.model.entity.user.ClientInfo;
+import ru.philit.ufs.model.entity.user.Subbranch;
 import ru.philit.ufs.web.exception.InvalidDataException;
 
 /**
@@ -50,7 +55,7 @@ public class OperationProvider {
    *
    * @param workplaceId уникальный номер УРМ/кассы
    * @param depositTask данные для взноса на корпоративную карту
-   * @param clientInfo информация о клиенте
+   * @param clientInfo  информация о клиенте
    * @return пакет с новой активной задачей
    */
   public OperationPackage addActiveDepositTask(String workplaceId,
@@ -63,7 +68,7 @@ public class OperationProvider {
    *
    * @param workplaceId уникальный номер УРМ/кассы
    * @param depositTask данные для взноса на корпоративную карту
-   * @param clientInfo информация о клиенте
+   * @param clientInfo  информация о клиенте
    * @return пакет с новой перенаправленной задачей
    */
   public OperationPackage addForwardedDepositTask(String workplaceId,
@@ -145,11 +150,11 @@ public class OperationProvider {
   /**
    * Подтверждение операции.
    *
-   * @param packageId идентификатор пакета задач
-   * @param taskId идентификатор задачи
-   * @param workplaceId номер УРМ/кассы
+   * @param packageId         идентификатор пакета задач
+   * @param taskId            идентификатор задачи
+   * @param workplaceId       номер УРМ/кассы
    * @param operationTypeCode код типа операции
-   * @param clientInfo информация о клиенте
+   * @param clientInfo        информация о клиенте
    * @return информация об операции
    */
   public Operation confirmOperation(Long packageId, Long taskId, String workplaceId,
@@ -175,20 +180,28 @@ public class OperationProvider {
       throw new InvalidDataException("Запрашиваемый пакет задач не найден");
     }
 
+    CashOrder cashOrderFromCardDeposit = new CashOrder();
     List<OperationTask> depositTasks = opPackage.getToCardDeposits();
     for (OperationTask operationTask : depositTasks) {
       if (operationTask.getId().equals(taskId)) {
         operationTask.setStatus(OperationTaskStatus.COMPLETED);
+
+        if (operationTask instanceof OperationTaskCardDeposit) {
+          OperationTaskCardDeposit taskCardDeposit = (OperationTaskCardDeposit) operationTask;
+          cashOrderFromCardDeposit = createCashOrderFromCardDeposit(taskCardDeposit, clientInfo);
+        }
+
         break;
       }
     }
+
     OperationPackage updateTasksPackage = new OperationPackage();
     updateTasksPackage.setId(packageId);
     updateTasksPackage.setToCardDeposits(depositTasks);
 
     operationCache.updateTasksInPackage(updateTasksPackage, clientInfo);
 
-    CashOrder cashOrder = asfsCache.createCashOrder(MockCacheOrder.getCashOrder(), clientInfo);
+    CashOrder cashOrder = asfsCache.createCashOrder(cashOrderFromCardDeposit, clientInfo);
     cashOrder = asfsCache.updateStatusCashOrder(cashOrder, clientInfo);
     asfsCache.addConfirmedCashOrder(cashOrder);
 
@@ -204,9 +217,9 @@ public class OperationProvider {
   /**
    * Отмена операции.
    *
-   * @param packageId идентификатор пакета задач
-   * @param taskId идентификатор задачи
-   * @param workplaceId номер УРМ/кассы
+   * @param packageId         идентификатор пакета задач
+   * @param taskId            идентификатор задачи
+   * @param workplaceId       номер УРМ/кассы
    * @param operationTypeCode код типа операции
    * @return информация об операции
    */
@@ -250,5 +263,53 @@ public class OperationProvider {
     operationCache.addOperation(taskId, operation);
 
     return operation;
+  }
+
+  private CashOrder createCashOrderFromCardDeposit(OperationTaskCardDeposit taskCardDeposit,
+      ClientInfo clientInfo) {
+    CashOrder cashOrder = new CashOrder();
+
+    cashOrder.setCashOrderId(String.valueOf((int) (Math.random() * 100000)));
+    cashOrder.setOperationType(OperationTypeCode.TO_CARD_DEPOSIT);
+    cashOrder.setCashOrderINum("50");
+    cashOrder.setAccountId(taskCardDeposit.getAccountId());
+    cashOrder.setAmount(taskCardDeposit.getAmount());
+    cashOrder.setAmountInWords("Сто тысяч");
+    cashOrder.setCurrencyType("RUB");
+    cashOrder.setCashOrderStatus(CashOrderStatus.CREATED);
+    cashOrder.setWorkPlaceUId("12");
+    cashOrder.setRepId(taskCardDeposit.getRepresentativeId());
+    cashOrder.setRepFio(taskCardDeposit.getRepFio());
+    cashOrder.setAddress("Ул. Титова");
+    cashOrder.setDateOfBirth(new GregorianCalendar(2020, Calendar.JUNE, 30)
+        .getTime());
+
+    cashOrder.setIdentityDocuments(new ArrayList<IdentityDocument>());
+    IdentityDocument identityDocument = new IdentityDocument();
+    identityDocument.setType(IdentityDocumentType.PASSPORT);
+    identityDocument.setSeries("44 33");
+    identityDocument.setNumber("444666");
+    identityDocument.setIssuedDate(
+        new GregorianCalendar(1980, Calendar.JANUARY, 30).getTime());
+    identityDocument.setIssuedBy("МВД");
+    cashOrder.getIdentityDocuments().add(identityDocument);
+
+    cashOrder.setPlaceOfBirth("Москва");
+    cashOrder.setResident(true);
+    cashOrder.setInn(taskCardDeposit.getInn());
+    cashOrder.setCashSymbols(taskCardDeposit.getCashSymbols());
+
+    cashOrder.setSubbranch(new Subbranch());
+    cashOrder.getSubbranch().setSubbranchCode("1385930102");
+    cashOrder.getSubbranch().setVspCode("0102");
+    cashOrder.getSubbranch().setOsbCode(null);
+    cashOrder.getSubbranch().setGosbCode("8593");
+    cashOrder.getSubbranch().setTbCode("13");
+
+    cashOrder.setComment("Коммент");
+    cashOrder.setAccount20202Num("20202897357400146292");
+    cashOrder.setUserLogin(clientInfo.getUser().getLogin());
+
+    return cashOrder;
   }
 }
