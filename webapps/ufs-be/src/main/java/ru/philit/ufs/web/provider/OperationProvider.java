@@ -25,6 +25,7 @@ import ru.philit.ufs.model.entity.oper.OperationTaskStatus;
 import ru.philit.ufs.model.entity.oper.OperationTasksRequest;
 import ru.philit.ufs.model.entity.user.ClientInfo;
 import ru.philit.ufs.model.entity.user.Subbranch;
+import ru.philit.ufs.utility.MoneyToWordsConverter;
 import ru.philit.ufs.web.exception.InvalidDataException;
 
 /**
@@ -274,7 +275,11 @@ public class OperationProvider {
     cashOrder.setCashOrderINum("50");
     cashOrder.setAccountId(taskCardDeposit.getAccountId());
     cashOrder.setAmount(taskCardDeposit.getAmount());
-    cashOrder.setAmountInWords("Сто тысяч");
+
+    MoneyToWordsConverter moneyToWordsConverter
+        = new MoneyToWordsConverter(taskCardDeposit.getAmount());
+    cashOrder.setAmountInWords(moneyToWordsConverter.num2str());
+
     cashOrder.setCurrencyType("RUB");
     cashOrder.setCashOrderStatus(CashOrderStatus.CREATED);
     cashOrder.setWorkPlaceUId("12");
